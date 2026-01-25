@@ -159,6 +159,13 @@
  .pio/libdeps/esp32-c6-devkitc-1/ArduinoJson/src/ArduinoJson.h \
  .pio/libdeps/esp32-c6-devkitc-1/ArduinoJson/src/ArduinoJson.hpp \
  .pio/libdeps/esp32-c6-devkitc-1/ArduinoJson/src/ArduinoJson/Configuration.hpp \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/ESPmDNS/src/ESPmDNS.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/espressif__mdns/include/mdns.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_ip_addr.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_types.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_defaults.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_hw_support/include/esp_interface.h \
  .pio/libdeps/esp32-c6-devkitc-1/PubSubClient/src/PubSubClient.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/Client.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
@@ -166,7 +173,6 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiType.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_types.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_types_generic.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_hw_support/include/esp_interface.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/local/esp_wifi_types_native.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_types_generic.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_he_types.h \
@@ -174,7 +180,6 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiGeneric.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_smartconfig.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_types.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_ip_addr.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_eth/include/esp_eth_driver.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_eth/include/esp_eth_com.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/hal/include/hal/eth_types.h \
@@ -213,9 +218,6 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_crypto_types.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_default.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_types.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_defaults.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Update/src/Update.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_rom/include/esp_rom_md5.h \

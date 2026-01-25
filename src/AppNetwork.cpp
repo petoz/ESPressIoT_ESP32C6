@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Helpers.h"
 #include <ArduinoJson.h>
+#include <ESPmDNS.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -95,6 +96,11 @@ void setupWiFi() {
 
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+
+  if (MDNS.begin("silvia")) {
+    Serial.println("MDNS responder started");
+    MDNS.addService("http", "tcp", 80);
+  }
 }
 
 void MQTT_reconnect() {
