@@ -56,13 +56,21 @@ bool loadConfig() {
   if (jsonDocument.containsKey("aD"))
     gaD = jsonDocument["aD"];
 
+  if (jsonDocument.containsKey("mqtt_server"))
+    strcpy(mqtt_server, jsonDocument["mqtt_server"]);
+  if (jsonDocument.containsKey("mqtt_port"))
+    strcpy(mqtt_port, jsonDocument["mqtt_port"]);
+  if (jsonDocument.containsKey("mqtt_user"))
+    strcpy(mqtt_user, jsonDocument["mqtt_user"]);
+  if (jsonDocument.containsKey("mqtt_pass"))
+    strcpy(mqtt_pass, jsonDocument["mqtt_pass"]);
+
   return true;
 }
 
 bool saveConfig() {
   DynamicJsonDocument jsonDocument(BUF_SIZE);
 
-  // jsonDocument["ssid"] = wifi_ssid;  jsonDocument["password"] = wifi_pass;
   jsonDocument["tset"] = gTargetTemp;
   jsonDocument["tband"] = gOvershoot;
   jsonDocument["P"] = gP;
@@ -71,6 +79,11 @@ bool saveConfig() {
   jsonDocument["aP"] = gaP;
   jsonDocument["aI"] = gaI;
   jsonDocument["aD"] = gaD;
+
+  jsonDocument["mqtt_server"] = mqtt_server;
+  jsonDocument["mqtt_port"] = mqtt_port;
+  jsonDocument["mqtt_user"] = mqtt_user;
+  jsonDocument["mqtt_pass"] = mqtt_pass;
 
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {

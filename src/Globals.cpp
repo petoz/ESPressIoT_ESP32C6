@@ -1,5 +1,10 @@
 #include "Globals.h"
 
+char mqtt_server[40] = "contabo2.usemy.cloud";
+char mqtt_port[6] = "1883";
+char mqtt_user[20] = "petoz";
+char mqtt_pass[20] = "xanticavid";
+
 double gTargetTemp = S_TSET;
 double gOvershoot = S_TBAND;
 double gInputTemp = 20.0;

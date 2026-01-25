@@ -154,12 +154,11 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/freertos_stats.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/io_pin_remap.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
- include/Globals.h .pio/libdeps/esp32-c6-devkitc-1/PID/PID_v1.h \
- include/Helpers.h \
+ include/Configuration.h include/Globals.h \
+ .pio/libdeps/esp32-c6-devkitc-1/PID/PID_v1.h include/Helpers.h \
  .pio/libdeps/esp32-c6-devkitc-1/ArduinoJson/src/ArduinoJson.h \
  .pio/libdeps/esp32-c6-devkitc-1/ArduinoJson/src/ArduinoJson.hpp \
  .pio/libdeps/esp32-c6-devkitc-1/ArduinoJson/src/ArduinoJson/Configuration.hpp \
- include/WiFiSecrets.h \
  .pio/libdeps/esp32-c6-devkitc-1/PubSubClient/src/PubSubClient.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/Client.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFi.h \
@@ -209,4 +208,27 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiClient.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiServer.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src/WiFiUdp.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkUdp.h \
+ .pio/libdeps/esp32-c6-devkitc-1/WiFiManager/WiFiManager.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_crypto_types.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_wifi_default.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_types.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_netif/include/esp_netif_defaults.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Update/src/Update.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_rom/include/esp_rom_md5.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/HashBuilder.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/HEXBuilder.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src/WebServer.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src/HTTP_Method.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/http_parser/http_parser.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src/Uri.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src/middleware/Middleware.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src/detail/RequestHandler.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/DNSServer/src/DNSServer.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/AsyncUDP/src/AsyncUDP.h \
+ .pio/libdeps/esp32-c6-devkitc-1/WiFiManager/wm_strings_en.h \
+ .pio/libdeps/esp32-c6-devkitc-1/WiFiManager/wm_consts_en.h

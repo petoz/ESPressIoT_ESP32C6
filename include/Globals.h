@@ -4,6 +4,11 @@
 #include <Arduino.h>
 #include <PID_v1.h>
 
+extern char mqtt_server[40];
+extern char mqtt_port[6];
+extern char mqtt_user[20];
+extern char mqtt_pass[20];
+
 // Standard reset values
 #define S_P 115.0
 #define S_I 4.0

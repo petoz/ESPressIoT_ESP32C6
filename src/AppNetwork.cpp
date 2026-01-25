@@ -1,107 +1,124 @@
 #include "AppNetwork.h"
+#include "Configuration.h" // Needed for saveConfig/loadConfig if we move parameters there
 #include "Globals.h"
 #include "Helpers.h"
-#include "WiFiSecrets.h"
+#include <ArduinoJson.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
-
-#define MAX_CONNECTION_RETRIES 20
-
-// MQTT Settings
-// If defined in WiFiSecrets.h, use them. If not, define default or rely on them
-// being there. Original code had them in mqtt.ino, but here user might have
-// them in WiFiSecrets.h? The warning said MQTT_HOST is in WiFiSecrets.h
-#ifndef MQTT_HOST
-#define MQTT_HOST "contabo2.usemy.cloud"
-#endif
-
-// Some might not be in Secrets
-#ifndef MQTT_TOPIC
-#define MQTT_TOPIC "espressiot"
-#endif
-#ifndef MQTT_USER
-#define MQTT_USER "petoz"
-#endif
-#ifndef MQTT_PASS
-#define MQTT_PASS "xanticavid"
-#endif
-#ifndef MQTT_PORT
-#define MQTT_PORT 1883
-#endif
+#include <WiFiManager.h>
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-String mqttConfigTopicStr = String(MQTT_TOPIC) + "/config/#";
-const char *mqttConfigTopic = mqttConfigTopicStr.c_str();
+String mqttConfigTopicStr;
+const char *mqttConfigTopic;
 
-String mqttStatusTopicStr = String(MQTT_TOPIC) + "/status";
-const char *mqttStatusTopic = mqttStatusTopicStr.c_str();
+String mqttStatusTopicStr;
+const char *mqttStatusTopic;
+
+// Flag for saving data
+bool shouldSaveConfig = false;
+
+// Callback notifying us of the need to save config
+void saveConfigCallback() {
+  Serial.println("Should save config");
+  shouldSaveConfig = true;
+}
 
 void setupWiFi() {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-  WiFi.macAddress(mac);
+  WiFiManager wifiManager;
 
-  Serial.println("");
-  Serial.print("MAC address: ");
-  Serial.println(macToString(mac));
+  // set config save notify callback
+  wifiManager.setSaveConfigCallback(saveConfigCallback);
 
-  Serial.print("Connecting to Wifi AP");
-  for (int i = 0; i < MAX_CONNECTION_RETRIES && WiFi.status() != WL_CONNECTED;
-       i++) {
-    delay(500);
-    Serial.print(".");
+  // Custom parameters for MQTT
+  WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server,
+                                          40);
+  WiFiManagerParameter custom_mqtt_port("port", "mqtt port", mqtt_port, 6);
+  WiFiManagerParameter custom_mqtt_user("user", "mqtt user", mqtt_user, 20);
+  WiFiManagerParameter custom_mqtt_pass("pass", "mqtt pass", mqtt_pass, 20);
+
+  wifiManager.addParameter(&custom_mqtt_server);
+  wifiManager.addParameter(&custom_mqtt_port);
+  wifiManager.addParameter(&custom_mqtt_user);
+  wifiManager.addParameter(&custom_mqtt_pass);
+
+  // wifiManager.resetSettings(); // Un-comment to reset for testing
+
+  // Fetches ssid and pass and tries to connect
+  // If it does not connect it starts an access point with the specified name
+  // and goes into a blocking loop awaiting configuration
+  if (!wifiManager.autoConnect("ESPressIoT-Setup")) {
+    Serial.println("failed to connect and hit timeout");
+    delay(3000);
+    // reset and try again, or maybe put it to deep sleep
+    ESP.restart();
+    delay(5000);
   }
 
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.print("Error connection to AP after ");
-    Serial.print(MAX_CONNECTION_RETRIES);
-    Serial.println(" retries.");
-  } else {
-    Serial.println("");
-    Serial.println("WiFi connected.");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
+  // if you get here you have connected to the WiFi
+  Serial.println("connected...yeey :)");
+
+  // read updated parameters
+  strcpy(mqtt_server, custom_mqtt_server.getValue());
+  strcpy(mqtt_port, custom_mqtt_port.getValue());
+  strcpy(mqtt_user, custom_mqtt_user.getValue());
+  strcpy(mqtt_pass, custom_mqtt_pass.getValue());
+
+  Serial.println("The values in the file are: ");
+  Serial.println("\tmqtt_server : " + String(mqtt_server));
+  Serial.println("\tmqtt_port : " + String(mqtt_port));
+  Serial.println("\tmqtt_user : " + String(mqtt_user));
+  Serial.println("\tmqtt_pass : " + String(mqtt_pass));
+
+  // save the custom parameters to FS
+  if (shouldSaveConfig) {
+    // Logic handled in Configuration.cpp, we just need to ensure global vars
+    // are updated which they are via strcpy above. We should call saveConfig()
+    // here. Note: saveConfig() is in Configuration.h/cpp declared in main scope
+    // mostly but we included Configuration.h so we can use it.
+    saveConfig();
   }
+
+  // Re-init topics with loaded/updated values if they depend on user/etc
+  // (optional) For now fixed topics
+  mqttConfigTopicStr = String(MQTT_TOPIC) + "/config/#";
+  mqttConfigTopic = mqttConfigTopicStr.c_str();
+
+  mqttStatusTopicStr = String(MQTT_TOPIC) + "/status";
+  mqttStatusTopic = mqttStatusTopicStr.c_str();
+
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void MQTT_reconnect() {
   if (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
+
+    // Create a random client ID
     String clientId = "ESP32Client-";
     clientId += String(random(0xffff), HEX);
 
-    if (client.connect(clientId.c_str(), MQTT_USER, MQTT_PASS)) {
+    // Attempt to connect
+    if (client.connect(clientId.c_str(), mqtt_user, mqtt_pass)) {
       Serial.println("connected");
       client.subscribe(mqttConfigTopic, 1);
     } else {
       Serial.print("failed, rc=");
       Serial.println(client.state());
+      // Wait 1 seconds before retrying handled in loop
     }
   }
 }
 
 void MQTT_callback(char *topic, byte *payload, unsigned int length) {
-#ifdef MQTT_DEBUG
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] '");
-#endif
-
+  // same callback logic
   String msg = "";
   for (unsigned int i = 0; i < length; i++) {
-#ifdef MQTT_DEBUG
-    Serial.print((char)payload[i]);
-#endif
     msg += (char)payload[i];
   }
-
-#ifdef MQTT_DEBUG
-  Serial.println("'");
-#endif
-
   double val = msg.toFloat();
 
   if (strstr(topic, "/config/tset")) {
@@ -113,18 +130,15 @@ void MQTT_callback(char *topic, byte *payload, unsigned int length) {
 }
 
 void setupMQTT() {
-  client.setServer(MQTT_HOST, MQTT_PORT);
+  uint16_t port = atoi(mqtt_port);
+  client.setServer(mqtt_server, port);
   client.setCallback(MQTT_callback);
 }
 
 void loopMQTT() {
   if (WiFi.status() == WL_CONNECTED) {
     if (!client.connected()) {
-      for (int i = 0; i < 2 && !client.connected(); i++) {
-        MQTT_reconnect();
-        if (!client.connected())
-          delay(100);
-      }
+      MQTT_reconnect();
     }
     if (client.connected()) {
       client.loop();
