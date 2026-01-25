@@ -11,6 +11,10 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+#ifndef MQTT_TOPIC
+#define MQTT_TOPIC "espressiot"
+#endif
+
 String mqttConfigTopicStr;
 const char *mqttConfigTopic;
 
