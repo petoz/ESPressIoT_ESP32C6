@@ -2,7 +2,8 @@
 #include "Configuration.h"
 #include "Globals.h"
 #include "Tuning.h"
-#include <LittleFS.h>
+#include <SPIFFS.h>
+#include <Update.h>
 #include <WebServer.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -12,8 +13,8 @@ WebServer server(80);
 void handleStatusApi() { server.send(200, "application/json", gStatusAsJson); }
 
 void handleNotFound() {
-  if (LittleFS.exists(server.uri())) {
-    File file = LittleFS.open(server.uri(), "r");
+  if (SPIFFS.exists(server.uri())) {
+    File file = SPIFFS.open(server.uri(), "r");
     String contentType = "text/plain";
     if (server.uri().endsWith(".html"))
       contentType = "text/html";
@@ -40,7 +41,7 @@ void handleNotFound() {
 // Keep old handlers for backward/logic compatibility where needed,
 // but point root to index.html
 void handleRoot() {
-  File file = LittleFS.open("/index.html", "r");
+  File file = SPIFFS.open("/index.html", "r");
   server.streamFile(file, "text/html");
   file.close();
 }
@@ -254,14 +255,77 @@ void handleTuningMode() {
   server.send(200, "text/html", message);
 }
 
+void handleUpdate() {
+  String message =
+      "<head><meta name=\"viewport\" content=\"width=device-width, "
+      "initial-scale=1.0\" /><title>EspressIoT Firmware "
+      "Update</title></head><h1>Firmware Update</h1>\n";
+  message +=
+      "<form method='POST' action='/update' enctype='multipart/form-data'>";
+  message += "<input type='file' name='update'><br><br>";
+  message += "<input type='submit' value='Update'>";
+  message += "</form>";
+  message += "<hr/>";
+  message += "<a href=\"/config\"><button>Back</button></a><br/>\n";
+  server.send(200, "text/html", message);
+}
+
+void handleUpdateUpload() {
+  HTTPUpload &upload = server.upload();
+  if (upload.status == UPLOAD_FILE_START) {
+    Serial.printf("Update: %s\n", upload.filename.c_str());
+    if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { // start with max available size
+      Update.printError(Serial);
+    }
+  } else if (upload.status == UPLOAD_FILE_WRITE) {
+    /* flashing firmware to ESP*/
+    if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+      Update.printError(Serial);
+    }
+  } else if (upload.status == UPLOAD_FILE_END) {
+    if (Update.end(true)) { // true to set the size to the current progress
+      Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+    } else {
+      Update.printError(Serial);
+    }
+  }
+}
+
+void handleUpdateResult() {
+  String message =
+      "<head><meta http-equiv=\"refresh\" content=\"10;url=/\">\n<meta "
+      "name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" "
+      "/><title>EspressIoT Update</title></head>";
+  message += Update.hasError() ? "<h1>Update Failed!</h1>"
+                               : "<h1>Update Success! Rebooting...</h1>";
+  server.send(200, "text/html", message);
+  if (!Update.hasError()) {
+    delay(1000);
+    ESP.restart();
+  }
+}
+
 void setupWebSrv() {
-  LittleFS.begin();
+  SPIFFS.begin(true);
 
   server.on("/", handleRoot);
   server.on("/api/status", handleStatusApi);
   server.on("/set_config", handleSetConfig);
+  // OTA Update
+  server.on("/update", HTTP_GET, handleUpdate);
+  server.on("/update", HTTP_POST, handleUpdateResult, handleUpdateUpload);
+
   server.on("/heater_on", handleHeaterOn);
   server.on("/heater_off", handleHeaterOff);
+
+  server.on("/config", handleConfig);
+  server.on("/config.html", handleConfig);
+  server.on("/tuningstats", handleTuningStats);
+  server.on("/set_tuning", handleSetTuning);
+  server.on("/loadconf", handleLoadConfig);
+  server.on("/saveconf", handleSaveConfig);
+  server.on("/resetconf", handleResetConfig);
+  server.on("/tuningmode", handleTuningMode);
 
   // Legacy/Other handlers can be kept or migrated
   // For brevity/focus on new UI, we rely on LittleFS serving mostly.

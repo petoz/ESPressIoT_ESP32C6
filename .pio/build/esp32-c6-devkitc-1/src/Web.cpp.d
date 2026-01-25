@@ -155,8 +155,14 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/Arduino.h \
  include/Configuration.h include/Globals.h \
  .pio/libdeps/esp32-c6-devkitc-1/PID/PID_v1.h include/Tuning.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/LittleFS/src/LittleFS.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/SPIFFS/src/SPIFFS.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/FS/src/FS.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Update/src/Update.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/MD5Builder.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/WString.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_rom/include/esp_rom_md5.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/HashBuilder.h \
+ /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/HEXBuilder.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src/WebServer.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/Network.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkInterface.h \
@@ -184,7 +190,6 @@
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/esp_wifi/include/esp_smartconfig.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32-libs/esp32c6/include/espressif__network_provisioning/include/network_provisioning/network_config.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkManager.h \
- /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/WString.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkClient.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/cores/esp32/Client.h \
  /Users/peterzapletal/.platformio/packages/framework-arduinoespressif32/libraries/Network/src/NetworkServer.h \
