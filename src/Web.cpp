@@ -8,43 +8,37 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 
+#include "WebStatic.h"
+
 WebServer server(80);
 
 void handleStatusApi() { server.send(200, "application/json", gStatusAsJson); }
 
-void handleNotFound() {
-  if (SPIFFS.exists(server.uri())) {
-    File file = SPIFFS.open(server.uri(), "r");
-    String contentType = "text/plain";
-    if (server.uri().endsWith(".html"))
-      contentType = "text/html";
-    else if (server.uri().endsWith(".css"))
-      contentType = "text/css";
-    else if (server.uri().endsWith(".js"))
-      contentType = "application/javascript";
+void handleRoot() { server.send(200, "text/html", index_html); }
 
-    server.streamFile(file, contentType);
-    file.close();
-  } else {
-    String message = "File Not Found\n\n";
-    message += "URI: ";
-    message += server.uri();
-    message += "\nMethod: ";
-    message += (server.method() == HTTP_GET) ? "GET" : "POST";
-    message += "\nArguments: ";
-    message += server.args();
-    message += "\n";
-    server.send(404, "text/plain", message);
-  }
+void handleCss() { server.send(200, "text/css", style_css); }
+
+void handleJs() { server.send(200, "application/javascript", script_js); }
+
+void handleNotFound() {
+  String message = "File Not Found\n\n";
+  message += "URI: ";
+  message += server.uri();
+  message += "\nMethod: ";
+  message += (server.method() == HTTP_GET) ? "GET" : "POST";
+  message += "\nArguments: ";
+  message += server.args();
+  message += "\n";
+  server.send(404, "text/plain", message);
 }
 
 // Keep old handlers for backward/logic compatibility where needed,
 // but point root to index.html
-void handleRoot() {
-  File file = SPIFFS.open("/index.html", "r");
-  server.streamFile(file, "text/html");
-  file.close();
-}
+// void handleRoot() {
+//   File file = SPIFFS.open("/index.html", "r");
+//   server.streamFile(file, "text/html");
+//   file.close();
+// }
 
 void handleConfig() {
   String message =
@@ -84,7 +78,7 @@ void handleConfig() {
              "Default</button></a><br/>\n";
   message += "<a href=\"./update\"><button>Update Firmware</button></a><br/>\n";
   message += "<hr/>\n";
-  message += "<form action=\"set_tuning\">\nTuning Threshold (\°C):<br>\n";
+  message += "<form action=\"set_tuning\">\nTuning Threshold (&#176;C):<br>\n";
   message += "<input type=\"text\" name=\"tunethres\" value=\"" +
              String(aTuneThres) + "\"><br>\n";
   message += "Tuning Power (heater)<br>\n";
@@ -306,9 +300,11 @@ void handleUpdateResult() {
 }
 
 void setupWebSrv() {
-  SPIFFS.begin(true);
+  // SPIFFS.begin(true); // SPIFFS no longer required for web serving
 
   server.on("/", handleRoot);
+  server.on("/style.css", handleCss);
+  server.on("/script.js", handleJs);
   server.on("/api/status", handleStatusApi);
   server.on("/set_config", handleSetConfig);
   // OTA Update

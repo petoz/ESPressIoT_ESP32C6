@@ -21,6 +21,5 @@
 # Secrets (if any local backup remains)
 *Secrets.h
 wifi_credentials.h
-
-# Local config
 data/config.json
+
