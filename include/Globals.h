@@ -18,6 +18,7 @@ extern char mqtt_pass[20];
 #define S_aD 0.0
 #define S_TSET 96.5
 #define S_TBAND 1.5
+#define DEFAULT_RREF 430.0
 
 // Intervals
 #define HEATER_INTERVAL 1000
@@ -31,6 +32,7 @@ extern double gInputTemp;
 extern double gOutputPwr;
 extern double gP, gI, gD;
 extern double gaP, gaI, gaD;
+extern double gRref; // Reference resistor for MAX31865
 
 extern unsigned long time_now;
 extern unsigned long time_last;

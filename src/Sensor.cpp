@@ -10,7 +10,8 @@
 #define MAX_SCK 19
 
 // The reference resistor on the PT100 board (usually 430 or 4300)
-#define RREF 430.0
+// The reference resistor on the PT100 board (usually 430 or 4300)
+// #define RREF 430.0 // Now configurable via gRref
 // The 'nominal' 0-degrees-C resistance of the sensor
 // 100.0 for PT100, 1000.0 for PT1000
 #define RNOMINAL 100.0
@@ -35,7 +36,7 @@ void setupSensor() {
 void updateTempSensor() {
   if (abs((long)(millis() - lastSensTime)) >= TSIC_SMP_TIME) {
 
-    float curT = max31865.temperature(RNOMINAL, RREF);
+    float curT = max31865.temperature(RNOMINAL, gRref);
     uint8_t fault = max31865.readFault();
 
     if (fault) {

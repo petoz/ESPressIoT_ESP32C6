@@ -42,6 +42,9 @@ bool loadConfig() {
   if (jsonDocument.containsKey("tband"))
     gOvershoot = jsonDocument["tband"];
 
+  if (jsonDocument.containsKey("rref"))
+    gRref = jsonDocument["rref"];
+
   if (jsonDocument.containsKey("P"))
     gP = jsonDocument["P"];
   if (jsonDocument.containsKey("I"))
@@ -73,6 +76,7 @@ bool saveConfig() {
 
   jsonDocument["tset"] = gTargetTemp;
   jsonDocument["tband"] = gOvershoot;
+  jsonDocument["rref"] = gRref;
   jsonDocument["P"] = gP;
   jsonDocument["I"] = gI;
   jsonDocument["D"] = gD;
@@ -111,5 +115,7 @@ void resetConfig() {
   gaI = S_aI;
   gaD = S_aD;
   gTargetTemp = S_TSET;
+  gTargetTemp = S_TSET;
   gOvershoot = S_TBAND;
+  gRref = DEFAULT_RREF;
 }

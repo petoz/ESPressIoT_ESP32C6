@@ -70,6 +70,9 @@ void handleConfig() {
              "\"><br/>\n";
   message += "D <input type=\"text\" name=\"adgain\" value=\"" + String(gaD) +
              "\"><br><br>\n";
+  message += "Reference Resistor (Ohms):<br>\n";
+  message += "<input type=\"text\" name=\"rref\" value=\"" + String(gRref) +
+             "\"><br><br>\n";
   message += "<input type=\"submit\" value=\"Submit\">\n</form>";
   message += "<hr/>";
   message += "<a href=\"./loadconf\"><button>Load Config</button></a><br/>\n";
@@ -133,6 +136,8 @@ void handleSetConfig() {
       gI = server.arg(i).toFloat();
     else if (server.argName(i) == "dgain")
       gD = server.arg(i).toFloat();
+    else if (server.argName(i) == "rref")
+      gRref = server.arg(i).toFloat();
   }
 
   if (server.header("Accept").indexOf("application/json") >= 0) {
