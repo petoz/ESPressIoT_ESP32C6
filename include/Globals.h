@@ -63,6 +63,8 @@ extern int tune_count;
 extern unsigned long tune_time;
 extern unsigned long tune_start;
 
+extern bool mqtt_enabled;
+
 extern PID ESPPID;
 
 #endif

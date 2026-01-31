@@ -146,6 +146,12 @@ void setupMQTT() {
 }
 
 void loopMQTT() {
+  if (!mqtt_enabled) {
+    if (client.connected()) {
+      client.disconnect();
+    }
+    return;
+  }
   if (WiFi.status() == WL_CONNECTED) {
     if (!client.connected()) {
       MQTT_reconnect();
