@@ -74,6 +74,9 @@ bool loadConfig() {
   if (jsonDocument.containsKey("mqtt_enabled"))
     mqtt_enabled = jsonDocument["mqtt_enabled"];
 
+  if (jsonDocument.containsKey("mqtt_topic"))
+    strcpy(mqtt_topic, jsonDocument["mqtt_topic"]);
+
   return true;
 }
 
@@ -96,6 +99,7 @@ bool saveConfig() {
   jsonDocument["mqtt_user"] = mqtt_user;
   jsonDocument["mqtt_pass"] = mqtt_pass;
   jsonDocument["mqtt_enabled"] = mqtt_enabled;
+  jsonDocument["mqtt_topic"] = mqtt_topic;
 
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
@@ -128,4 +132,5 @@ void resetConfig() {
   gRref = DEFAULT_RREF;
   gEcoTime = DEFAULT_ECO_TIME;
   mqtt_enabled = true;
+  strlcpy(mqtt_topic, "espressiot", sizeof(mqtt_topic));
 }

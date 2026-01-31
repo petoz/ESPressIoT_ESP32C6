@@ -4,6 +4,7 @@ char mqtt_server[40] = "mqtt.example.com";
 char mqtt_port[6] = "1883";
 char mqtt_user[20] = "";
 char mqtt_pass[20] = "";
+char mqtt_topic[32] = "espressiot";
 
 double gTargetTemp = S_TSET;
 double gOvershoot = S_TBAND;

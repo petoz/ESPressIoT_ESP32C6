@@ -66,6 +66,9 @@ void handleConfig() {
   message += String("<option value=\"0\"") +
              (!mqtt_enabled ? " selected" : "") + ">Disabled</option>\n";
   message += "</select><br/><br/>\n";
+  message += "MQTT Topic:<br>\n";
+  message += "<input type=\"text\" name=\"mqtt_topic\" value=\"" +
+             String(mqtt_topic) + "\"><br/><br/>\n";
   message +=
       "normal PID:<br>\n P <input type=\"text\" name=\"pgain\" value=\"" +
       String(gP) + "\"><br/>\n";
@@ -153,6 +156,8 @@ void handleSetConfig() {
       gRref = server.arg(i).toFloat();
     else if (server.argName(i) == "mqtt_enabled")
       mqtt_enabled = server.arg(i).toInt();
+    else if (server.argName(i) == "mqtt_topic")
+      strcpy(mqtt_topic, server.arg(i).c_str());
   }
 
   if (server.header("Accept").indexOf("application/json") >= 0) {
