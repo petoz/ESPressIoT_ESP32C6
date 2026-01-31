@@ -111,6 +111,10 @@ void handleConfig() {
                "Mode</button></a><br/>\n";
   message += "<hr/>\n";
   message += "<a href=\"/\"><button>Back</button></a><br/>\n";
+  message += "<hr/>\n";
+  message += "<div><small>Version: " + String(FW_VERSION) + "</small></div>\n";
+  message += "<div><small>Commit: " + String(GIT_COMMIT) + "</small></div>\n";
+  message += "<div><small>Build: " + String(BUILD_TIME) + "</small></div>\n";
   server.send(200, "text/html", message);
 }
 
