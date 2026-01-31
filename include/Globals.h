@@ -4,6 +4,14 @@
 #include <Arduino.h>
 #include <PID_v1.h>
 
+#define FW_VERSION "1.1.0"
+#ifndef GIT_COMMIT
+#define GIT_COMMIT "unknown"
+#endif
+#ifndef BUILD_TIME
+#define BUILD_TIME "unknown"
+#endif
+
 extern char mqtt_server[40];
 extern char mqtt_port[6];
 extern char mqtt_user[20];
