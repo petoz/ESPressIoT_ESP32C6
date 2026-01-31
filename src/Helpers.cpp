@@ -30,7 +30,17 @@ String statusAsJson() {
   statusObject["targetTemperature"] = gTargetTemp;
   statusObject["heaterPower"] = gOutputPwr;
   statusObject["externalControlMode"] = externalControlMode;
+  statusObject["externalControlMode"] = externalControlMode;
   statusObject["externalButtonState"] = gButtonState;
+
+  // ECO Time Remaining logic
+  long remainingMs = -1;
+  if (gEcoTime > 0.1 && !poweroffMode) {
+    remainingMs = (long)(gEcoTime * 60000) - (long)(time_now - gEcoStartTime);
+    if (remainingMs < 0)
+      remainingMs = 0;
+  }
+  statusObject["ecoTimeRemaining"] = remainingMs;
 
   serializeJson(statusObject, outputString);
   return outputString;
