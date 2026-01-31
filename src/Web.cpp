@@ -59,6 +59,13 @@ void handleConfig() {
   message += "ECO Time (minutes, 0=disabled):<br>\n";
   message += "<input type=\"text\" name=\"eco_time\" value=\"" +
              String(gEcoTime) + "\"><br/><br/>\n";
+  message += "Enable MQTT:<br>\n";
+  message += "<select name=\"mqtt_enabled\">\n";
+  message += String("<option value=\"1\"") + (mqtt_enabled ? " selected" : "") +
+             ">Enabled</option>\n";
+  message += String("<option value=\"0\"") +
+             (!mqtt_enabled ? " selected" : "") + ">Disabled</option>\n";
+  message += "</select><br/><br/>\n";
   message +=
       "normal PID:<br>\n P <input type=\"text\" name=\"pgain\" value=\"" +
       String(gP) + "\"><br/>\n";
@@ -144,6 +151,8 @@ void handleSetConfig() {
       gD = server.arg(i).toFloat();
     else if (server.argName(i) == "rref")
       gRref = server.arg(i).toFloat();
+    else if (server.argName(i) == "mqtt_enabled")
+      mqtt_enabled = server.arg(i).toInt();
   }
 
   if (server.header("Accept").indexOf("application/json") >= 0) {

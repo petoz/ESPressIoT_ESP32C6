@@ -71,6 +71,9 @@ bool loadConfig() {
   if (jsonDocument.containsKey("mqtt_pass"))
     strcpy(mqtt_pass, jsonDocument["mqtt_pass"]);
 
+  if (jsonDocument.containsKey("mqtt_enabled"))
+    mqtt_enabled = jsonDocument["mqtt_enabled"];
+
   return true;
 }
 
@@ -92,6 +95,7 @@ bool saveConfig() {
   jsonDocument["mqtt_port"] = mqtt_port;
   jsonDocument["mqtt_user"] = mqtt_user;
   jsonDocument["mqtt_pass"] = mqtt_pass;
+  jsonDocument["mqtt_enabled"] = mqtt_enabled;
 
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
@@ -123,4 +127,5 @@ void resetConfig() {
   gOvershoot = S_TBAND;
   gRref = DEFAULT_RREF;
   gEcoTime = DEFAULT_ECO_TIME;
+  mqtt_enabled = true;
 }
