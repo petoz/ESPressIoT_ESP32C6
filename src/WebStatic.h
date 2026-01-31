@@ -216,7 +216,7 @@ function updateStatus() {
 
             // Update Chart
             const now = new Date().toLocaleTimeString();
-            if (tempChart.data.labels.length > 60) { // Keep last 60 points
+            if (tempChart.data.labels.length > 120) { // Keep last 120 points
                 tempChart.data.labels.shift();
                 tempChart.data.datasets[0].data.shift();
                 tempChart.data.datasets[1].data.shift();
