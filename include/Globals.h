@@ -9,14 +9,14 @@ extern char mqtt_port[6];
 extern char mqtt_user[20];
 extern char mqtt_pass[20];
 
-// Standard reset values
-#define S_P 115.0
-#define S_I 4.0
-#define S_D 850.0
+// Standard reset values (optimal for Rancilio Silvia)
+#define S_P 91.0
+#define S_I 0.26
+#define S_D 7950.0
 #define S_aP 100.0
 #define S_aI 0.0
 #define S_aD 0.0
-#define S_TSET 96.5
+#define S_TSET 90.0
 #define S_TBAND 1.5
 #define DEFAULT_RREF 430.0
 
