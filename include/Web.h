@@ -5,5 +5,7 @@
 
 void setupWebSrv();
 void loopWebSrv();
+void handleHeaterOn();
+void handleHeaterOff();
 
 #endif

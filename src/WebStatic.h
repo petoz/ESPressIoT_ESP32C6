@@ -35,6 +35,10 @@ static const char index_html[] = R"rawliteral(
                     <span class="label">Target</span>
                     <span class="value" id="target-value">-- °C</span>
                 </div>
+                <div class="status-item">
+                    <span class="label">ECO Timer</span>
+                    <span class="value" id="eco-value">--</span>
+                </div>
             </div>
         </div>
 
@@ -108,7 +112,12 @@ header {
 
 .status-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Changed to 2 columns for 4 items */
+    gap: 15px;
+    text-align: center;
+}
     gap: 10px;
     text-align: center;
 }
@@ -207,7 +216,21 @@ function updateStatus() {
 
             document.getElementById('temp-value').textContent = data.mesauredTemperature.toFixed(2) + ' °C';
             document.getElementById('target-value').textContent = data.targetTemperature.toFixed(1) + ' °C';
+            document.getElementById('temp-value').textContent = data.mesauredTemperature.toFixed(2) + ' °C';
+            document.getElementById('target-value').textContent = data.targetTemperature.toFixed(1) + ' °C';
             document.getElementById('power-value').textContent = (data.heaterPower / 10).toFixed(0) + ' %';
+            
+            // Update ECO
+            const ecoVal = document.getElementById('eco-value');
+            if (data.ecoTimeRemaining >= 0) {
+                 const minutes = Math.floor(data.ecoTimeRemaining / 60000);
+                 const seconds = Math.floor((data.ecoTimeRemaining % 60000) / 1000);
+                 ecoVal.textContent = minutes + "m " + seconds + "s";
+                 ecoVal.style.color = "var(--accent)";
+            } else {
+                 ecoVal.textContent = "Disabled";
+                 ecoVal.style.color = "var(--text-secondary)";
+            }
 
             // Update inputs
             if (document.activeElement !== document.getElementById('target-input')) {

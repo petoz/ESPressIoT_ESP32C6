@@ -75,7 +75,9 @@ void setup() {
   ESPPID.SetMode(AUTOMATIC);
 
   time_now = millis();
+  time_now = millis();
   time_last = time_now;
+  gEcoStartTime = time_now; // Initialize ECO timer
 }
 
 void serialStatus() { Serial.println(gStatusAsJson); }
@@ -125,6 +127,15 @@ void loop() {
 #ifdef ENABLE_SERIAL
     serialStatus();
 #endif
+
+    // ECO Mode Logic
+    if (gEcoTime > 0.1 &&
+        !poweroffMode) { // Use small threshold for float comparison
+      if ((time_now - gEcoStartTime) > (unsigned long)(gEcoTime * 60000)) {
+        handleHeaterOff();
+        Serial.println("ECO Mode: Heater turned off automatically.");
+      }
+    }
 
     time_last = time_now;
   }

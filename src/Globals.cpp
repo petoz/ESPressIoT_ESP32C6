@@ -12,9 +12,11 @@ double gOutputPwr = 0.0;
 double gP = S_P, gI = S_I, gD = S_D;
 double gaP = S_aP, gaI = S_aI, gaD = S_aD;
 double gRref = DEFAULT_RREF;
+double gEcoTime = DEFAULT_ECO_TIME;
 
 unsigned long time_now = 0;
 unsigned long time_last = 0;
+unsigned long gEcoStartTime = 0;
 
 int gButtonState = 0;
 uint8_t mac[6];

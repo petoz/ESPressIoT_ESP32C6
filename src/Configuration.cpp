@@ -45,6 +45,9 @@ bool loadConfig() {
   if (jsonDocument.containsKey("rref"))
     gRref = jsonDocument["rref"];
 
+  if (jsonDocument.containsKey("eco_time"))
+    gEcoTime = jsonDocument["eco_time"];
+
   if (jsonDocument.containsKey("P"))
     gP = jsonDocument["P"];
   if (jsonDocument.containsKey("I"))
@@ -77,6 +80,7 @@ bool saveConfig() {
   jsonDocument["tset"] = gTargetTemp;
   jsonDocument["tband"] = gOvershoot;
   jsonDocument["rref"] = gRref;
+  jsonDocument["eco_time"] = gEcoTime;
   jsonDocument["P"] = gP;
   jsonDocument["I"] = gI;
   jsonDocument["D"] = gD;
@@ -118,4 +122,5 @@ void resetConfig() {
   gTargetTemp = S_TSET;
   gOvershoot = S_TBAND;
   gRref = DEFAULT_RREF;
+  gEcoTime = DEFAULT_ECO_TIME;
 }

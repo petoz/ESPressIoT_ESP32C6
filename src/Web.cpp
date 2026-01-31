@@ -56,6 +56,9 @@ void handleConfig() {
   message += "<form action=\"set_config\">\nThreshold for adaptive PID:<br>\n";
   message += "<input type=\"text\" name=\"tband\" value=\"" +
              String(gOvershoot) + "\"><br/><br/>\n";
+  message += "ECO Time (minutes, 0=disabled):<br>\n";
+  message += "<input type=\"text\" name=\"eco_time\" value=\"" +
+             String(gEcoTime) + "\"><br/><br/>\n";
   message +=
       "normal PID:<br>\n P <input type=\"text\" name=\"pgain\" value=\"" +
       String(gP) + "\"><br/>\n";
@@ -130,7 +133,10 @@ void handleSetConfig() {
       gTargetTemp = server.arg(i).toFloat();
     else if (server.argName(i) == "tband")
       gOvershoot = server.arg(i).toFloat();
-    else if (server.argName(i) == "pgain")
+    else if (server.argName(i) == "eco_time") {
+      gEcoTime = server.arg(i).toFloat();
+      gEcoStartTime = millis(); // Reset timer when config changes
+    } else if (server.argName(i) == "pgain")
       gP = server.arg(i).toFloat();
     else if (server.argName(i) == "igain")
       gI = server.arg(i).toFloat();
@@ -201,6 +207,7 @@ void handleResetConfig() {
 // ... helper wrappers ...
 void handleHeaterOn() {
   poweroffMode = false;
+  gEcoStartTime = millis(); // Reset eco timer
   server.send(200, "text/plain", "OK");
 }
 void handleHeaterOff() {

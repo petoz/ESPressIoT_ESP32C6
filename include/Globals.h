@@ -19,6 +19,7 @@ extern char mqtt_pass[20];
 #define S_TSET 90.0
 #define S_TBAND 1.5
 #define DEFAULT_RREF 430.0
+#define DEFAULT_ECO_TIME 0.0
 
 // Intervals
 #define HEATER_INTERVAL 1000
@@ -32,10 +33,12 @@ extern double gInputTemp;
 extern double gOutputPwr;
 extern double gP, gI, gD;
 extern double gaP, gaI, gaD;
-extern double gRref; // Reference resistor for MAX31865
+extern double gRref;    // Reference resistor for MAX31865
+extern double gEcoTime; // ECO timer in minutes
 
 extern unsigned long time_now;
 extern unsigned long time_last;
+extern unsigned long gEcoStartTime; // Timestamp when heater involved
 
 extern int gButtonState;
 extern uint8_t mac[6];
