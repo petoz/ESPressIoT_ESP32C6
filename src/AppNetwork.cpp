@@ -12,10 +12,6 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-#ifndef MQTT_TOPIC
-#define MQTT_TOPIC "espressiot"
-#endif
-
 String mqttConfigTopicStr;
 const char *mqttConfigTopic;
 
@@ -88,10 +84,10 @@ void setupWiFi() {
 
   // Re-init topics with loaded/updated values if they depend on user/etc
   // (optional) For now fixed topics
-  mqttConfigTopicStr = String(MQTT_TOPIC) + "/config/#";
+  mqttConfigTopicStr = String(mqtt_topic) + "/config/#";
   mqttConfigTopic = mqttConfigTopicStr.c_str();
 
-  mqttStatusTopicStr = String(MQTT_TOPIC) + "/status";
+  mqttStatusTopicStr = String(mqtt_topic) + "/status";
   mqttStatusTopic = mqttStatusTopicStr.c_str();
 
   Serial.print("IP address: ");

@@ -8,6 +8,7 @@ extern char mqtt_server[40];
 extern char mqtt_port[6];
 extern char mqtt_user[20];
 extern char mqtt_pass[20];
+extern char mqtt_topic[32];
 
 // Standard reset values (optimal for Rancilio Silvia)
 #define S_P 91.0
