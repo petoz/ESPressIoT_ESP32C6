@@ -25,6 +25,17 @@ This work is based on my previous work with with IoT, MQTT and my small controll
 * Configurable MQTT settings via Web UI (Enable/Disable, Custom Topic Prefix)
 * Automated Versioning: Web UI displays current Firmware Version, Git Commit, and Build Timestamp
 
+## Screenshots
+
+<p float="left">
+  <img src="doc/screenshots/web_ui_status.jpg" width="300" />
+  <img src="doc/screenshots/web_ui_history.jpg" width="300" /> 
+</p>
+<p float="left">
+  <img src="doc/screenshots/web_ui_config_1.jpg" width="300" />
+  <img src="doc/screenshots/web_ui_config_2.jpg" width="300" />
+</p>
+
 [1]: https://github.com/esp8266/Arduino
 [2]: https://github.com/br3ttb/Arduino-PID-Library
 [3]: https://github.com/Schm1tz1/arduino-tsic
