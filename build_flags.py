@@ -9,6 +9,12 @@ try:
         .strip()
         .decode("utf-8")
     )
+    # Check for uncommitted changes
+    try:
+        subprocess.check_call(["git", "diff", "--quiet"])
+        subprocess.check_call(["git", "diff", "--cached", "--quiet"])
+    except subprocess.CalledProcessError:
+        revision += "-dirty"
 except:
     revision = "unknown"
 
