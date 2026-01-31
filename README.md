@@ -22,6 +22,8 @@ This work is based on my previous work with with IoT, MQTT and my small controll
 * JSON-Config in internal SPIFFS (uses [ArduinoJSON][5])
 * Re-Written auto-tuning-loop to optimize PID parameters
 * integrated simulation to test features and functionality
+* Configurable MQTT settings via Web UI (Enable/Disable, Custom Topic Prefix)
+* Automated Versioning: Web UI displays current Firmware Version, Git Commit, and Build Timestamp
 
 [1]: https://github.com/esp8266/Arduino
 [2]: https://github.com/br3ttb/Arduino-PID-Library
