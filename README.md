@@ -1,6 +1,6 @@
 # ESPressIoT
 This project covers somewhat advances features for an espresso machine controller. The basic idea was to have reproducible "espresso results" due to temperature regulation and being able to fine-tune. Especialy small machines have a low heat capacity and quality suffers a lot from different heat-up-times and high hysteresis in standard temperature switches.
-This work is based on my previous work with with IoT, MQTT and my small controller [cofcon](https://github.com/Schm1tz1/cofcon). As always - take care, you are working with high voltages and you are switching loads up to a few Kilowatts. Please be sure yo know what you are doing, always disconnect and unplug you machine before installing electronics components, choose your components (cables, connectors, sensors, SSR etc.) wisely...
+This work is based on my previous work with with IoT, MQTT and my small controller [cofcon](https://github.com/Schm1tz1/cofcon). It is also heavily based on the original [ESPressIoT](https://github.com/Schm1tz1/ESPressIoT) project by Schm1tz1. As always - take care, you are working with high voltages and you are switching loads up to a few Kilowatts. Please be sure yo know what you are doing, always disconnect and unplug you machine before installing electronics components, choose your components (cables, connectors, sensors, SSR etc.) wisely...
 
 ## Dependencies
 * Espresso Machine (Gaggic CC, Rancilio Silvia etc.)
@@ -34,6 +34,13 @@ This work is based on my previous work with with IoT, MQTT and my small controll
 <p float="left">
   <img src="doc/screenshots/web_ui_config_1.jpg" width="300" />
   <img src="doc/screenshots/web_ui_config_2.jpg" width="300" />
+</p>
+
+## Hardware Installation
+<p float="left">
+  <img src="doc/hardware/pcb_enclosure.jpg" width="300" />
+  <img src="doc/hardware/installation_internal.jpg" width="300" />
+  <img src="doc/hardware/boiler_wiring.jpg" width="300" />
 </p>
 
 [1]: https://github.com/esp8266/Arduino
