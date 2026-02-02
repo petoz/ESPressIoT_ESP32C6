@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EspressIoT Configuration</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Configuration</h1>
+            <a href="/" class="button">Back to Dashboard</a>
+        </header>
+
+        <div class="card">
+            <h2>General Settings</h2>
+            <form action="/set_config" method="GET">
+                <div class="control-group">
+                    <label>Target Temperature:</label>
+                    <input type="text" name="tset" id="tset">
+                </div>
+                <div class="control-group">
+                    <label>Threshold for adaptive PID:</label>
+                    <input type="text" name="tband" id="tband">
+                </div>
+                <div class="control-group">
+                    <label>ECO Time (minutes, 0=disabled):</label>
+                    <input type="text" name="eco_time" id="eco_time">
+                </div>
+                <!-- TODO: MQTT sections -->
+                <div class="control-group">
+                    <label>Enable MQTT:</label>
+                    <select name="mqtt_enabled" id="mqtt_enabled">
+                        <option value="1">Enabled</option>
+                        <option value="0">Disabled</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>MQTT Topic:</label>
+                    <input type="text" name="mqtt_topic" id="mqtt_topic">
+                </div>
+                <div class="control-group">
+                    <label>Reference Resistor (Ohms):</label>
+                    <input type="text" name="rref" id="rref">
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+            <div class="action-buttons">
+                <a href="/loadconf"><button>Load Config</button></a>
+                <a href="/saveconf"><button>Save Config</button></a>
+                <a href="/resetconf"><button>Reset Config to Default</button></a>
+                <a href="/update"><button>Update Firmware</button></a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>PID Parameters</h2>
+            <form action="/set_config" method="GET">
+                <h3>Normal PID</h3>
+                <div class="control-group">
+                    <label>P:</label> <input type="text" name="pgain" id="pgain">
+                </div>
+                <div class="control-group">
+                    <label>I:</label> <input type="text" name="igain" id="igain">
+                </div>
+                <div class="control-group">
+                    <label>D:</label> <input type="text" name="dgain" id="dgain">
+                </div>
+
+                <h3>Adaptive PID</h3>
+                <div class="control-group">
+                    <label>P:</label> <input type="text" name="apgain" id="apgain">
+                </div>
+                <div class="control-group">
+                    <label>I:</label> <input type="text" name="aigain" id="aigain">
+                </div>
+                <div class="control-group">
+                    <label>D:</label> <input type="text" name="adgain" id="adgain">
+                </div>
+                <button type="submit">Submit PID</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Tuning</h2>
+            <form action="/set_tuning" method="GET">
+                <div class="control-group">
+                    <label>Tuning Threshold (°C):</label>
+                    <input type="text" name="tunethres" id="tunethres">
+                </div>
+                <div class="control-group">
+                    <label>Tuning Power (heater):</label>
+                    <input type="text" name="tunestep" id="tunestep">
+                </div>
+                <button type="submit">Submit Tuning Params</button>
+            </form>
+            <hr>
+            <div class="action-buttons">
+                <a href="/tuningmode"><button style="background-color:#98B4D4">Toggle PID Tuning Mode</button></a>
+                <a href="/tuningstats"><button>Stats</button></a>
+            </div>
+        </div>
+
+        <footer>
+            <div id="version-info">
+                <div><small id="fw_version">Version: --</small></div>
+                <div><small id="git_commit">Commit: --</small></div>
+                <div><small id="build_time">Build: --</small></div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Fetch config on load
+        fetch('/api/config')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('tset').value = data.tset;
+                document.getElementById('tband').value = data.tband;
+                document.getElementById('eco_time').value = data.eco_time;
+                document.getElementById('mqtt_enabled').value = data.mqtt_enabled;
+                document.getElementById('mqtt_topic').value = data.mqtt_topic;
+                document.getElementById('rref').value = data.rref;
+
+                document.getElementById('pgain').value = data.pgain;
+                document.getElementById('igain').value = data.igain;
+                document.getElementById('dgain').value = data.dgain;
+
+                document.getElementById('apgain').value = data.apgain;
+                document.getElementById('aigain').value = data.aigain;
+                document.getElementById('adgain').value = data.adgain;
+
+                document.getElementById('tunethres').value = data.tunethres;
+                document.getElementById('tunestep').value = data.tunestep;
+
+                document.getElementById('fw_version').textContent = 'Version: ' + data.fw_version;
+                document.getElementById('git_commit').textContent = 'Commit: ' + data.git_commit;
+                document.getElementById('build_time').textContent = 'Build: ' + data.build_time;
+            })
+            .catch(err => console.error('Error fetching config:', err));
+    </script>
+</body>
+
+</html>

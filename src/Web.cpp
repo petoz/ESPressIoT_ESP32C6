@@ -14,6 +14,33 @@ WebServer server(80);
 
 void handleStatusApi() { server.send(200, "application/json", gStatusAsJson); }
 
+void handleGetConfig() {
+  String json = "{";
+  json += "\"tset\":" + String(gTargetTemp) + ",";
+  json += "\"tband\":" + String(gOvershoot) + ",";
+  json += "\"eco_time\":" + String(gEcoTime) + ",";
+  json += "\"mqtt_enabled\":" + String(mqtt_enabled) + ",";
+  json += "\"mqtt_topic\":\"" + String(mqtt_topic) + "\",";
+  json += "\"rref\":" + String(gRref) + ",";
+  
+  json += "\"pgain\":" + String(gP) + ",";
+  json += "\"igain\":" + String(gI) + ",";
+  json += "\"dgain\":" + String(gD) + ",";
+  
+  json += "\"apgain\":" + String(gaP) + ",";
+  json += "\"aigain\":" + String(gaI) + ",";
+  json += "\"adgain\":" + String(gaD) + ",";
+  
+  json += "\"tunethres\":" + String(aTuneThres) + ",";
+  json += "\"tunestep\":" + String(aTuneStep) + ",";
+
+  json += "\"fw_version\":\"" + String(FW_VERSION) + "\",";
+  json += "\"git_commit\":\"" + String(GIT_COMMIT) + "\",";
+  json += "\"build_time\":\"" + String(BUILD_TIME) + "\"";
+  json += "}";
+  server.send(200, "application/json", json);
+}
+
 void handleRoot() { server.send(200, "text/html", index_html); }
 
 void handleCss() { server.send(200, "text/css", style_css); }
@@ -40,82 +67,9 @@ void handleNotFound() {
 //   file.close();
 // }
 
+// Serve static config file
 void handleConfig() {
-  String message =
-      "<head><meta name=\"viewport\" content=\"width=device-width, "
-      "initial-scale=1.0\" /><title>EspressIoT "
-      "Configuration</title></head><h1>EspressIoT</h1>\n";
-  if (tuning) {
-    message += "<h1> PID TUNING MODE RUNNING !</h1>";
-    message += "<a href=\"/tuningstats\"><button>Stats</button></a><br/>\n";
-    message += "<hr/>\n";
-  }
-  message += "<form action=\"set_config\">\nTarget Temperature:<br>\n";
-  message += "<input type=\"text\" name=\"tset\" value=\"" +
-             String(gTargetTemp) + "\"><br/><br/>\n";
-  message += "<form action=\"set_config\">\nThreshold for adaptive PID:<br>\n";
-  message += "<input type=\"text\" name=\"tband\" value=\"" +
-             String(gOvershoot) + "\"><br/><br/>\n";
-  message += "ECO Time (minutes, 0=disabled):<br>\n";
-  message += "<input type=\"text\" name=\"eco_time\" value=\"" +
-             String(gEcoTime) + "\"><br/><br/>\n";
-  message += "Enable MQTT:<br>\n";
-  message += "<select name=\"mqtt_enabled\">\n";
-  message += String("<option value=\"1\"") + (mqtt_enabled ? " selected" : "") +
-             ">Enabled</option>\n";
-  message += String("<option value=\"0\"") +
-             (!mqtt_enabled ? " selected" : "") + ">Disabled</option>\n";
-  message += "</select><br/><br/>\n";
-  message += "MQTT Topic:<br>\n";
-  message += "<input type=\"text\" name=\"mqtt_topic\" value=\"" +
-             String(mqtt_topic) + "\"><br/><br/>\n";
-  message +=
-      "normal PID:<br>\n P <input type=\"text\" name=\"pgain\" value=\"" +
-      String(gP) + "\"><br/>\n";
-  message += "I <input type=\"text\" name=\"igain\" value=\"" + String(gI) +
-             "\"><br/>\n";
-  message += "D <input type=\"text\" name=\"dgain\" value=\"" + String(gD) +
-             "\"><br><br>\n";
-  message +=
-      "adaptive PID:<br>\n P <input type=\"text\" name=\"apgain\" value=\"" +
-      String(gaP) + "\"><br/>\n";
-  message += "I <input type=\"text\" name=\"aigain\" value=\"" + String(gaI) +
-             "\"><br/>\n";
-  message += "D <input type=\"text\" name=\"adgain\" value=\"" + String(gaD) +
-             "\"><br><br>\n";
-  message += "Reference Resistor (Ohms):<br>\n";
-  message += "<input type=\"text\" name=\"rref\" value=\"" + String(gRref) +
-             "\"><br><br>\n";
-  message += "<input type=\"submit\" value=\"Submit\">\n</form>";
-  message += "<hr/>";
-  message += "<a href=\"./loadconf\"><button>Load Config</button></a><br/>\n";
-  message += "<a href=\"./saveconf\"><button>Save Config</button></a><br/>\n";
-  message += "<a href=\"./resetconf\"><button>Reset Config to "
-             "Default</button></a><br/>\n";
-  message += "<a href=\"./update\"><button>Update Firmware</button></a><br/>\n";
-  message += "<hr/>\n";
-  message += "<form action=\"set_tuning\">\nTuning Threshold (&#176;C):<br>\n";
-  message += "<input type=\"text\" name=\"tunethres\" value=\"" +
-             String(aTuneThres) + "\"><br>\n";
-  message += "Tuning Power (heater)<br>\n";
-  message += "<input type=\"text\" name=\"tunestep\" value=\"" +
-             String(aTuneStep) + "\"><br><br>\n";
-  message += "<input type=\"submit\" value=\"Submit\">\n</form><br/>";
-  if (!tuning)
-    message += "<a href=\"./tuningmode\"><button "
-               "style=\"background-color:#98B4D4\">Start PID Tuning "
-               "Mode</button></a><br/>\n";
-  else
-    message += "<a href=\"./tuningmode\"><button "
-               "style=\"background-color:#98B4D4\">Finish PID Tuning "
-               "Mode</button></a><br/>\n";
-  message += "<hr/>\n";
-  message += "<a href=\"/\"><button>Back</button></a><br/>\n";
-  message += "<hr/>\n";
-  message += "<div><small>Version: " + String(FW_VERSION) + "</small></div>\n";
-  message += "<div><small>Commit: " + String(GIT_COMMIT) + "</small></div>\n";
-  message += "<div><small>Build: " + String(BUILD_TIME) + "</small></div>\n";
-  server.send(200, "text/html", message);
+  server.send(200, "text/html", config_html);
 }
 
 void handleTuningStats() {
@@ -336,6 +290,7 @@ void setupWebSrv() {
   server.on("/style.css", handleCss);
   server.on("/script.js", handleJs);
   server.on("/api/status", handleStatusApi);
+  server.on("/api/config", handleGetConfig);
   server.on("/set_config", handleSetConfig);
   // OTA Update
   server.on("/update", HTTP_GET, handleUpdate);
