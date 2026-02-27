@@ -12,6 +12,12 @@ class MockHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=WEB_DIR, **kwargs)
 
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
     def do_GET(self):
         if self.path.startswith("/api/status"):
             self.send_response(200)
@@ -80,6 +86,7 @@ print(f"Starting mock server at http://localhost:{PORT}")
 print(f"Serving files from ./{WEB_DIR}")
 print("Press Ctrl+C to stop")
 
+socketserver.TCPServer.allow_reuse_address = True
 with socketserver.TCPServer(("", PORT), MockHandler) as httpd:
     try:
         httpd.serve_forever()

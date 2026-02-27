@@ -25,6 +25,21 @@ This work is based on my previous work with with IoT, MQTT and my small controll
 * Configurable MQTT settings via Web UI (Enable/Disable, Custom Topic Prefix)
 * Automated Versioning: Web UI displays current Firmware Version, Git Commit, and Build Timestamp
 
+## Local Development
+To test and modify the web interface (HTML/SCSS/JS) locally without flashing the ESP32:
+
+1. Ensure you have Python 3 and Ruby Sass installed.
+2. In one terminal, start the local mock server:
+   ```bash
+   python3 serve_mock.py
+   ```
+3. In another terminal, watch for SCSS changes:
+   ```bash
+   sass --watch web/style.scss:web/style.css
+   ```
+4. Open your browser to `http://localhost:8000`.
+   *(Tip: Ensure your browser restricts caching (e.g., Hard Refresh) to immediately see CSS changes).*
+
 ## Screenshots
 
 <p float="left">
