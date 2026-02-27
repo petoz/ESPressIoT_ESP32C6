@@ -31,7 +31,7 @@
                     <input type="text" name="eco_time" id="eco_time">
                 </div>
                 <!-- TODO: MQTT sections -->
-                <div class="control-group">
+                <div class="control-group control-group--no-wrap">
                     <label>Enable MQTT:</label>
                     <select name="mqtt_enabled" id="mqtt_enabled">
                         <option value="1">Enabled</option>
@@ -46,13 +46,17 @@
                     <label>Reference Resistor (Ohms):</label>
                     <input type="text" name="rref" id="rref">
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" class="success">Submit</button>
             </form>
-            <div class="action-buttons">
+            <hr>
+            <div class="action-buttons action-buttons--no-wrap">
                 <a href="/loadconf"><button>Load Config</button></a>
                 <a href="/saveconf"><button>Save Config</button></a>
-                <a href="/resetconf"><button>Reset Config to Default</button></a>
-                <a href="/update"><button>Update Firmware</button></a>
+            </div>
+            <hr>
+            <div class="action-buttons">
+                <a href="/resetconf"><button class="danger">Reset Config to Default</button></a>
+                <a href="/update"><button class="danger">Update Firmware</button></a>
             </div>
         </div>
 
@@ -60,27 +64,19 @@
             <h2>PID Parameters</h2>
             <form action="/set_config" method="GET">
                 <h3>Normal PID</h3>
-                <div class="control-group">
+                <div class="control-group control-group--no-wrap">
                     <label>P:</label> <input type="text" name="pgain" id="pgain">
-                </div>
-                <div class="control-group">
                     <label>I:</label> <input type="text" name="igain" id="igain">
-                </div>
-                <div class="control-group">
                     <label>D:</label> <input type="text" name="dgain" id="dgain">
                 </div>
 
                 <h3>Adaptive PID</h3>
-                <div class="control-group">
+                <div class="control-group control-group--no-wrap">
                     <label>P:</label> <input type="text" name="apgain" id="apgain">
-                </div>
-                <div class="control-group">
                     <label>I:</label> <input type="text" name="aigain" id="aigain">
-                </div>
-                <div class="control-group">
                     <label>D:</label> <input type="text" name="adgain" id="adgain">
                 </div>
-                <button type="submit">Submit PID</button>
+                <button type="submit" class="success">Submit PID</button>
             </form>
         </div>
 
@@ -95,11 +91,11 @@
                     <label>Tuning Power (heater):</label>
                     <input type="text" name="tunestep" id="tunestep">
                 </div>
-                <button type="submit">Submit Tuning Params</button>
+                <button type="submit" class="success">Submit Tuning Params</button>
             </form>
             <hr>
             <div class="action-buttons">
-                <a href="/tuningmode"><button style="background-color:#98B4D4">Toggle PID Tuning Mode</button></a>
+                <a href="/tuningmode"><button class="danger">Toggle PID Tuning Mode</button></a>
                 <a href="/tuningstats"><button>Stats</button></a>
             </div>
         </div>

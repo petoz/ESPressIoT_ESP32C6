@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESPressIoT Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -45,21 +47,23 @@
 
         <div class="card">
             <h2>Controls</h2>
-            <div class="control-group">
+            <div class="control-group control-group--no-wrap">
+                <label>Set Target Temp:</label>
+                <input type="number" id="target-input" step="0.5" value="96.5">
+                <button onclick="updateConfig()" class="button button--auto-width success">Set</button>
+            </div>
+            <hr>
+            <div class="control-group control-group--no-wrap">
                 <button id="btn-heater-on" onclick="control('heater_on')">Heater ON</button>
                 <button id="btn-heater-off" onclick="control('heater_off')" class="danger">Heater OFF</button>
             </div>
-            <div class="control-group">
-                <label>Set Target Temp:</label>
-                <input type="number" id="target-input" step="0.5" value="96.5">
-                <button onclick="updateConfig()">Set</button>
-            </div>
         </div>
-        
+
         <footer>
             <a href="/config.html">Advanced Configuration</a>
         </footer>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>

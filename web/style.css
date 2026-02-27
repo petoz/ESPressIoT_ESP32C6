@@ -23,9 +23,16 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .card {
@@ -34,6 +41,9 @@ header {
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .status-grid {
@@ -75,7 +85,23 @@ button {
   cursor: pointer;
   font-weight: bold;
   transition: transform 0.1s;
-  margin-right: 10px;
+  text-decoration: none;
+  flex: 1 1 100%;
+}
+button:not(:last-child) {
+  margin-bottom: 10px;
+}
+a:has(> button) {
+  display: flex;
+  flex: 1 1 100%;
+  text-decoration: none;
+}
+a:has(> button):not(:last-child) {
+  margin-bottom: 10px;
+}
+
+button.button--auto-width {
+  flex: 0 0 auto;
 }
 
 button:active {
@@ -86,7 +112,12 @@ button.danger {
   background-color: var(--danger);
 }
 
+button.success {
+  background-color: var(--success);
+}
+
 input {
+  flex: 1 1 100%;
   background: #333;
   border: 1px solid #444;
   color: white;
@@ -100,6 +131,66 @@ input {
 
 .status-online {
   color: var(--success);
+}
+
+form {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 20px;
+}
+
+.control-group,
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.control-group .label,
+.action-buttons .label {
+  min-width: 50px;
+}
+.control-group--no-wrap,
+.action-buttons--no-wrap {
+  flex-wrap: nowrap;
+}
+.control-group--no-wrap label,
+.action-buttons--no-wrap label {
+  flex: 0 0 auto;
+}
+.control-group--no-wrap input,
+.action-buttons--no-wrap input {
+  flex: 1;
+  width: 0;
+  min-width: 40px;
+}
+.control-group--no-wrap select,
+.action-buttons--no-wrap select {
+  flex: 1 1 100%;
+  padding: 8px;
+}
+.control-group--no-wrap button,
+.control-group--no-wrap a:has(> button),
+.action-buttons--no-wrap button,
+.action-buttons--no-wrap a:has(> button) {
+  margin-bottom: 0;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+h3:first-child {
+  margin-top: 0;
+}
+
+hr {
+  flex: 1 1 100%;
+  width: 100%;
 }
 
 /*# sourceMappingURL=style.css.map */
