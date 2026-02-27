@@ -24,6 +24,7 @@ This work is based on my previous work with with IoT, MQTT and my small controll
 * integrated simulation to test features and functionality
 * Configurable MQTT settings via Web UI (Enable/Disable, Custom Topic Prefix)
 * Automated Versioning: Web UI displays current Firmware Version, Git Commit, and Build Timestamp
+* ECO Timer: Auto-off feature to turn off the heater after a configurable period of inactivity
 
 ## Local Development
 To test and modify the web interface (HTML/SCSS/JS) locally without flashing the ESP32:
