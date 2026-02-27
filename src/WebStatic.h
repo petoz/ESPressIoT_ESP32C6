@@ -6,13 +6,15 @@
 static const char index_html[] = R"rawliteral(
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ESPressIoT Dashboard</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -51,25 +53,26 @@ static const char index_html[] = R"rawliteral(
 
         <div class="card">
             <h2>Controls</h2>
-            <div class="control-group">
+            <div class="control-group control-group--no-wrap">
+                <label>Set Target Temp:</label>
+                <input type="number" id="target-input" step="0.5" value="96.5">
+                <button onclick="updateConfig()" class="button button--auto-width success">Set</button>
+            </div>
+            <hr>
+            <div class="control-group control-group--no-wrap">
                 <button id="btn-heater-on" onclick="control('heater_on')">Heater ON</button>
                 <button id="btn-heater-off" onclick="control('heater_off')" class="danger">Heater OFF</button>
             </div>
-            <div class="control-group">
-                <label>Set Target Temp:</label>
-                <input type="number" id="target-input" step="0.5" value="96.5">
-                <button onclick="updateConfig()">Set</button>
-            </div>
         </div>
-        
+
         <footer>
             <a href="/config.html">Advanced Configuration</a>
         </footer>
     </div>
     <script src="script.js"></script>
 </body>
-</html>
 
+</html>
 )rawliteral";
 
 static const char config_html[] = R"rawliteral(
@@ -106,7 +109,7 @@ static const char config_html[] = R"rawliteral(
                     <input type="text" name="eco_time" id="eco_time">
                 </div>
                 <!-- TODO: MQTT sections -->
-                <div class="control-group">
+                <div class="control-group control-group--no-wrap">
                     <label>Enable MQTT:</label>
                     <select name="mqtt_enabled" id="mqtt_enabled">
                         <option value="1">Enabled</option>
@@ -121,13 +124,17 @@ static const char config_html[] = R"rawliteral(
                     <label>Reference Resistor (Ohms):</label>
                     <input type="text" name="rref" id="rref">
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" class="success">Submit</button>
             </form>
-            <div class="action-buttons">
+            <hr>
+            <div class="action-buttons action-buttons--no-wrap">
                 <a href="/loadconf"><button>Load Config</button></a>
                 <a href="/saveconf"><button>Save Config</button></a>
-                <a href="/resetconf"><button>Reset Config to Default</button></a>
-                <a href="/update"><button>Update Firmware</button></a>
+            </div>
+            <hr>
+            <div class="action-buttons">
+                <a href="/resetconf"><button class="danger">Reset Config to Default</button></a>
+                <a href="/update"><button class="danger">Update Firmware</button></a>
             </div>
         </div>
 
@@ -135,27 +142,19 @@ static const char config_html[] = R"rawliteral(
             <h2>PID Parameters</h2>
             <form action="/set_config" method="GET">
                 <h3>Normal PID</h3>
-                <div class="control-group">
+                <div class="control-group control-group--no-wrap">
                     <label>P:</label> <input type="text" name="pgain" id="pgain">
-                </div>
-                <div class="control-group">
                     <label>I:</label> <input type="text" name="igain" id="igain">
-                </div>
-                <div class="control-group">
                     <label>D:</label> <input type="text" name="dgain" id="dgain">
                 </div>
 
                 <h3>Adaptive PID</h3>
-                <div class="control-group">
+                <div class="control-group control-group--no-wrap">
                     <label>P:</label> <input type="text" name="apgain" id="apgain">
-                </div>
-                <div class="control-group">
                     <label>I:</label> <input type="text" name="aigain" id="aigain">
-                </div>
-                <div class="control-group">
                     <label>D:</label> <input type="text" name="adgain" id="adgain">
                 </div>
-                <button type="submit">Submit PID</button>
+                <button type="submit" class="success">Submit PID</button>
             </form>
         </div>
 
@@ -170,11 +169,11 @@ static const char config_html[] = R"rawliteral(
                     <label>Tuning Power (heater):</label>
                     <input type="text" name="tunestep" id="tunestep">
                 </div>
-                <button type="submit">Submit Tuning Params</button>
+                <button type="submit" class="success">Submit Tuning Params</button>
             </form>
             <hr>
             <div class="action-buttons">
-                <a href="/tuningmode"><button style="background-color:#98B4D4">Toggle PID Tuning Mode</button></a>
+                <a href="/tuningmode"><button class="danger">Toggle PID Tuning Mode</button></a>
                 <a href="/tuningstats"><button>Stats</button></a>
             </div>
         </div>
@@ -248,9 +247,16 @@ body {
 
 header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .card {
@@ -259,6 +265,9 @@ header {
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .status-grid {
@@ -300,7 +309,23 @@ button {
   cursor: pointer;
   font-weight: bold;
   transition: transform 0.1s;
-  margin-right: 10px;
+  text-decoration: none;
+  flex: 1 1 100%;
+}
+button:not(:last-child) {
+  margin-bottom: 10px;
+}
+a:has(> button) {
+  display: flex;
+  flex: 1 1 100%;
+  text-decoration: none;
+}
+a:has(> button):not(:last-child) {
+  margin-bottom: 10px;
+}
+
+button.button--auto-width {
+  flex: 0 0 auto;
 }
 
 button:active {
@@ -311,7 +336,12 @@ button.danger {
   background-color: var(--danger);
 }
 
+button.success {
+  background-color: var(--success);
+}
+
 input {
+  flex: 1 1 100%;
   background: #333;
   border: 1px solid #444;
   color: white;
@@ -325,6 +355,66 @@ input {
 
 .status-online {
   color: var(--success);
+}
+
+form {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 20px;
+}
+
+.control-group,
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.control-group .label,
+.action-buttons .label {
+  min-width: 50px;
+}
+.control-group--no-wrap,
+.action-buttons--no-wrap {
+  flex-wrap: nowrap;
+}
+.control-group--no-wrap label,
+.action-buttons--no-wrap label {
+  flex: 0 0 auto;
+}
+.control-group--no-wrap input,
+.action-buttons--no-wrap input {
+  flex: 1;
+  width: 0;
+  min-width: 40px;
+}
+.control-group--no-wrap select,
+.action-buttons--no-wrap select {
+  flex: 1 1 100%;
+  padding: 8px;
+}
+.control-group--no-wrap button,
+.control-group--no-wrap a:has(> button),
+.action-buttons--no-wrap button,
+.action-buttons--no-wrap a:has(> button) {
+  margin-bottom: 0;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+h3:first-child {
+  margin-top: 0;
+}
+
+hr {
+  flex: 1 1 100%;
+  width: 100%;
 }
 
 /*# sourceMappingURL=style.css.map */
