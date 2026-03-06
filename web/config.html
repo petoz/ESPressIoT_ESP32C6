@@ -31,7 +31,7 @@
                     <input type="text" name="eco_time" id="eco_time">
                 </div>
                 <!-- TODO: MQTT sections -->
-                <div class="control-group control-group--no-wrap">
+                <div class="control-group control-group--mqtt">
                     <label>Enable MQTT:</label>
                     <select name="mqtt_enabled" id="mqtt_enabled">
                         <option value="1">Enabled</option>
@@ -64,17 +64,17 @@
             <h2>PID Parameters</h2>
             <form action="/set_config" method="GET">
                 <h3>Normal PID</h3>
-                <div class="control-group control-group--no-wrap">
-                    <label>P:</label> <input type="text" name="pgain" id="pgain">
-                    <label>I:</label> <input type="text" name="igain" id="igain">
-                    <label>D:</label> <input type="text" name="dgain" id="dgain">
+                <div class="control-group control-group--pid-settings">
+                    <div><label>P:</label><input type="text" name="pgain" id="pgain"></div>
+                    <div><label>I:</label><input type="text" name="igain" id="igain"></div>
+                    <div><label>D:</label><input type="text" name="dgain" id="dgain"></div>
                 </div>
 
                 <h3>Adaptive PID</h3>
-                <div class="control-group control-group--no-wrap">
-                    <label>P:</label> <input type="text" name="apgain" id="apgain">
-                    <label>I:</label> <input type="text" name="aigain" id="aigain">
-                    <label>D:</label> <input type="text" name="adgain" id="adgain">
+                <div class="control-group control-group--pid-settings">
+                    <div><label>P:</label> <input type="text" name="apgain" id="apgain"></div>
+                    <div><label>I:</label> <input type="text" name="aigain" id="aigain"></div>
+                    <div><label>D:</label> <input type="text" name="adgain" id="adgain"></div>
                 </div>
                 <button type="submit" class="success">Submit PID</button>
             </form>

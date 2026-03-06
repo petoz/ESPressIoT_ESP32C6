@@ -156,28 +156,61 @@ form {
         min-width: 50px;
     }
 
-    &--no-wrap {
-        flex-wrap: nowrap;
-
+    &--no-wrap,
+    &--pid-settings,
+    &--mqtt {
         label {
-            flex: 0 0 auto;
+            flex: 0 1 auto;
+            display: flex;
+            align-items: center;
         }
 
         input {
             flex: 1;
             width: 0;
+            /* keep a minimum usable width */
             min-width: 40px;
         }
 
         select {
             flex: 1 1 100%;
             padding: 8px;
+            min-width: 100px;
         }
 
         button,
         a:has(> button) {
             margin-bottom: 0;
         }
+    }
+
+    &--no-wrap {
+        flex-wrap: nowrap;
+
+        label {
+            min-width: 75px;
+        }
+    }
+
+    &--pid-settings {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+        gap: 10px;
+
+        & > div {
+            display: flex;
+            align-items: center;
+            min-width: 0;
+        }
+
+        label {
+            margin-right: 5px;
+        }
+    }
+
+    &--mqtt {
+        display: grid;
+        grid-template-columns: minmax(100px, auto) 1fr;
     }
 }
 
