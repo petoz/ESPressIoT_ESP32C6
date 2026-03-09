@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <PID_v1.h>
 
-#define FW_VERSION "1.3.0"
+#define FW_VERSION "1.3.2"
 #ifndef GIT_COMMIT
 #define GIT_COMMIT "unknown"
 #endif

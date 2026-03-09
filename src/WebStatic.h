@@ -30,12 +30,12 @@ static const char index_html[] = R"rawliteral(
                     <span class="value" id="temp-value">-- °C</span>
                 </div>
                 <div class="status-item">
-                    <span class="label">Heater Power</span>
-                    <span class="value" id="power-value">-- %</span>
-                </div>
-                <div class="status-item">
                     <span class="label">Target</span>
                     <span class="value" id="target-value">-- °C</span>
+                </div>
+                <div class="status-item">
+                    <span class="label">Heater Power</span>
+                    <span class="value" id="power-value">-- %</span>
                 </div>
                 <div class="status-item">
                     <span class="label">ECO Timer</span>
@@ -109,7 +109,7 @@ static const char config_html[] = R"rawliteral(
                     <input type="text" name="eco_time" id="eco_time">
                 </div>
                 <!-- TODO: MQTT sections -->
-                <div class="control-group control-group--no-wrap">
+                <div class="control-group control-group--mqtt">
                     <label>Enable MQTT:</label>
                     <select name="mqtt_enabled" id="mqtt_enabled">
                         <option value="1">Enabled</option>
@@ -142,17 +142,17 @@ static const char config_html[] = R"rawliteral(
             <h2>PID Parameters</h2>
             <form action="/set_config" method="GET">
                 <h3>Normal PID</h3>
-                <div class="control-group control-group--no-wrap">
-                    <label>P:</label> <input type="text" name="pgain" id="pgain">
-                    <label>I:</label> <input type="text" name="igain" id="igain">
-                    <label>D:</label> <input type="text" name="dgain" id="dgain">
+                <div class="control-group control-group--pid-settings">
+                    <div><label>P:</label><input type="text" name="pgain" id="pgain"></div>
+                    <div><label>I:</label><input type="text" name="igain" id="igain"></div>
+                    <div><label>D:</label><input type="text" name="dgain" id="dgain"></div>
                 </div>
 
                 <h3>Adaptive PID</h3>
-                <div class="control-group control-group--no-wrap">
-                    <label>P:</label> <input type="text" name="apgain" id="apgain">
-                    <label>I:</label> <input type="text" name="aigain" id="aigain">
-                    <label>D:</label> <input type="text" name="adgain" id="adgain">
+                <div class="control-group control-group--pid-settings">
+                    <div><label>P:</label> <input type="text" name="apgain" id="apgain"></div>
+                    <div><label>I:</label> <input type="text" name="aigain" id="aigain"></div>
+                    <div><label>D:</label> <input type="text" name="adgain" id="adgain"></div>
                 </div>
                 <button type="submit" class="success">Submit PID</button>
             </form>
@@ -374,30 +374,71 @@ form {
 .action-buttons .label {
   min-width: 50px;
 }
+.control-group--no-wrap label, .control-group--pid-settings label, .control-group--mqtt label,
+.action-buttons--no-wrap label,
+.action-buttons--pid-settings label,
+.action-buttons--mqtt label {
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+}
+.control-group--no-wrap input, .control-group--pid-settings input, .control-group--mqtt input,
+.action-buttons--no-wrap input,
+.action-buttons--pid-settings input,
+.action-buttons--mqtt input {
+  flex: 1;
+  width: 0;
+  /* keep a minimum usable width */
+  min-width: 40px;
+}
+.control-group--no-wrap select, .control-group--pid-settings select, .control-group--mqtt select,
+.action-buttons--no-wrap select,
+.action-buttons--pid-settings select,
+.action-buttons--mqtt select {
+  flex: 1 1 100%;
+  padding: 8px;
+  min-width: 100px;
+}
+.control-group--no-wrap button,
+.control-group--no-wrap a:has(> button), .control-group--pid-settings button,
+.control-group--pid-settings a:has(> button), .control-group--mqtt button,
+.control-group--mqtt a:has(> button),
+.action-buttons--no-wrap button,
+.action-buttons--no-wrap a:has(> button),
+.action-buttons--pid-settings button,
+.action-buttons--pid-settings a:has(> button),
+.action-buttons--mqtt button,
+.action-buttons--mqtt a:has(> button) {
+  margin-bottom: 0;
+}
 .control-group--no-wrap,
 .action-buttons--no-wrap {
   flex-wrap: nowrap;
 }
 .control-group--no-wrap label,
 .action-buttons--no-wrap label {
-  flex: 0 0 auto;
+  min-width: 75px;
 }
-.control-group--no-wrap input,
-.action-buttons--no-wrap input {
-  flex: 1;
-  width: 0;
-  min-width: 40px;
+.control-group--pid-settings,
+.action-buttons--pid-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  gap: 10px;
 }
-.control-group--no-wrap select,
-.action-buttons--no-wrap select {
-  flex: 1 1 100%;
-  padding: 8px;
+.control-group--pid-settings > div,
+.action-buttons--pid-settings > div {
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
-.control-group--no-wrap button,
-.control-group--no-wrap a:has(> button),
-.action-buttons--no-wrap button,
-.action-buttons--no-wrap a:has(> button) {
-  margin-bottom: 0;
+.control-group--pid-settings label,
+.action-buttons--pid-settings label {
+  margin-right: 5px;
+}
+.control-group--mqtt,
+.action-buttons--mqtt {
+  display: grid;
+  grid-template-columns: minmax(100px, auto) 1fr;
 }
 
 h2 {
