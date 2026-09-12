@@ -137,8 +137,21 @@ void MQTT_callback(char *topic, byte *payload, unsigned int length) {
 
 void setupMQTT() {
   uint16_t port = atoi(mqtt_port);
+  if (port == 0) {
+    port = 1883;
+  }
   client.setServer(mqtt_server, port);
   client.setCallback(MQTT_callback);
+
+  mqttConfigTopicStr = String(mqtt_topic) + "/config/#";
+  mqttConfigTopic = mqttConfigTopicStr.c_str();
+
+  mqttStatusTopicStr = String(mqtt_topic) + "/status";
+  mqttStatusTopic = mqttStatusTopicStr.c_str();
+
+  if (client.connected()) {
+    client.disconnect();
+  }
 }
 
 void loopMQTT() {

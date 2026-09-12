@@ -1,4 +1,5 @@
 #include "Web.h"
+#include "AppNetwork.h"
 #include "Configuration.h"
 #include "Globals.h"
 #include "Tuning.h"
@@ -20,6 +21,10 @@ void handleGetConfig() {
   json += "\"tband\":" + String(gOvershoot) + ",";
   json += "\"eco_time\":" + String(gEcoTime) + ",";
   json += "\"mqtt_enabled\":" + String(mqtt_enabled) + ",";
+  json += "\"mqtt_server\":\"" + String(mqtt_server) + "\",";
+  json += "\"mqtt_port\":\"" + String(mqtt_port) + "\",";
+  json += "\"mqtt_user\":\"" + String(mqtt_user) + "\",";
+  json += "\"mqtt_pass\":\"" + String(mqtt_pass) + "\",";
   json += "\"mqtt_topic\":\"" + String(mqtt_topic) + "\",";
   json += "\"rref\":" + String(gRref) + ",";
   
@@ -114,14 +119,29 @@ void handleSetConfig() {
       gRref = server.arg(i).toFloat();
     else if (server.argName(i) == "mqtt_enabled")
       mqtt_enabled = server.arg(i).toInt();
+    else if (server.argName(i) == "mqtt_server")
+      strcpy(mqtt_server, server.arg(i).c_str());
+    else if (server.argName(i) == "mqtt_port")
+      strcpy(mqtt_port, server.arg(i).c_str());
+    else if (server.argName(i) == "mqtt_user")
+      strcpy(mqtt_user, server.arg(i).c_str());
+    else if (server.argName(i) == "mqtt_pass")
+      strcpy(mqtt_pass, server.arg(i).c_str());
     else if (server.argName(i) == "mqtt_topic")
       strcpy(mqtt_topic, server.arg(i).c_str());
   }
 
+  saveConfig();
+  setupMQTT();
+
   if (server.header("Accept").indexOf("application/json") >= 0) {
     server.send(200, "application/json", "{\"status\":\"ok\"}");
   } else {
-    server.send(200, "text/plain", "OK");
+    String message =
+        "<head><meta http-equiv=\"refresh\" content=\"2;url=/config\">\n<meta "
+        "name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" "
+        "/><title>EspressIoT</title></head><h1>Configuration saved !</h1>\n";
+    server.send(200, "text/html", message);
   }
 }
 

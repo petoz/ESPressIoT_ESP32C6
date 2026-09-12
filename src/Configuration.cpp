@@ -132,5 +132,9 @@ void resetConfig() {
   gRref = DEFAULT_RREF;
   gEcoTime = DEFAULT_ECO_TIME;
   mqtt_enabled = true;
-  strlcpy(mqtt_topic, "espressiot", sizeof(mqtt_topic));
+  strlcpy(mqtt_server, "mqtt.usemy.cloud", sizeof(mqtt_server));
+  strlcpy(mqtt_port, "1883", sizeof(mqtt_port));
+  strlcpy(mqtt_user, "petoz", sizeof(mqtt_user));
+  strlcpy(mqtt_pass, "xanticavid", sizeof(mqtt_pass));
+  strlcpy(mqtt_topic, "silvia_petoz", sizeof(mqtt_topic));
 }

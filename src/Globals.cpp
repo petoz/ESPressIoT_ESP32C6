@@ -1,10 +1,10 @@
 #include "Globals.h"
 
-char mqtt_server[40] = "mqtt.example.com";
+char mqtt_server[40] = "mqtt.usemy.cloud";
 char mqtt_port[6] = "1883";
-char mqtt_user[20] = "";
-char mqtt_pass[20] = "";
-char mqtt_topic[32] = "espressiot";
+char mqtt_user[20] = "petoz";
+char mqtt_pass[20] = "xanticavid";
+char mqtt_topic[32] = "silvia_petoz";
 
 double gTargetTemp = S_TSET;
 double gOvershoot = S_TBAND;

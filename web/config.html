@@ -30,13 +30,29 @@
                     <label>ECO Time (minutes, 0=disabled):</label>
                     <input type="text" name="eco_time" id="eco_time">
                 </div>
-                <!-- TODO: MQTT sections -->
+                <!-- MQTT sections -->
                 <div class="control-group control-group--no-wrap">
                     <label>Enable MQTT:</label>
                     <select name="mqtt_enabled" id="mqtt_enabled">
                         <option value="1">Enabled</option>
                         <option value="0">Disabled</option>
                     </select>
+                </div>
+                <div class="control-group">
+                    <label>MQTT Server:</label>
+                    <input type="text" name="mqtt_server" id="mqtt_server">
+                </div>
+                <div class="control-group">
+                    <label>MQTT Port:</label>
+                    <input type="text" name="mqtt_port" id="mqtt_port">
+                </div>
+                <div class="control-group">
+                    <label>MQTT User:</label>
+                    <input type="text" name="mqtt_user" id="mqtt_user">
+                </div>
+                <div class="control-group">
+                    <label>MQTT Password:</label>
+                    <input type="password" name="mqtt_pass" id="mqtt_pass">
                 </div>
                 <div class="control-group">
                     <label>MQTT Topic:</label>
@@ -118,7 +134,11 @@
                 document.getElementById('tband').value = data.tband;
                 document.getElementById('eco_time').value = data.eco_time;
                 document.getElementById('mqtt_enabled').value = data.mqtt_enabled;
-                document.getElementById('mqtt_topic').value = data.mqtt_topic;
+                document.getElementById('mqtt_server').value = data.mqtt_server || '';
+                document.getElementById('mqtt_port').value = data.mqtt_port || '';
+                document.getElementById('mqtt_user').value = data.mqtt_user || '';
+                document.getElementById('mqtt_pass').value = data.mqtt_pass || '';
+                document.getElementById('mqtt_topic').value = data.mqtt_topic || '';
                 document.getElementById('rref').value = data.rref;
 
                 document.getElementById('pgain').value = data.pgain;
