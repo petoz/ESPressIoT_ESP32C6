@@ -154,7 +154,6 @@ void sendHADiscovery() {
   client.publish(climateTopic.c_str(), climateConfig.c_str(), true);
 
   // 2. Heater Power Sensor
-  String heaterTopic = "homeassistant/sensor/" + devId + "_power/config";
   String heaterConfig = "{"
       "\"name\":\"Heater Power\","
       "\"unique_id\":\"" + devId + "_heater_power\","
@@ -166,7 +165,6 @@ void sendHADiscovery() {
   client.publish(heaterTopic.c_str(), heaterConfig.c_str(), true);
 
   // 3. Current Temperature Sensor
-  String tempTopic = "homeassistant/sensor/" + devId + "_temp/config";
   String tempConfig = "{"
       "\"name\":\"Current Temperature\","
       "\"unique_id\":\"" + devId + "_temperature\","
@@ -179,7 +177,6 @@ void sendHADiscovery() {
   client.publish(tempTopic.c_str(), tempConfig.c_str(), true);
 
   // 4. Power Switch
-  String switchTopic = "homeassistant/switch/" + devId + "_power/config";
   String switchConfig = "{"
       "\"name\":\"Power\","
       "\"unique_id\":\"" + devId + "_power_switch\","
@@ -193,7 +190,6 @@ void sendHADiscovery() {
   client.publish(switchTopic.c_str(), switchConfig.c_str(), true);
 
   // 5. ECO Time Remaining Sensor
-  String ecoTopic = "homeassistant/sensor/" + devId + "_eco/config";
   String ecoConfig = "{"
       "\"name\":\"ECO Time Remaining\","
       "\"unique_id\":\"" + devId + "_eco_remaining\","
