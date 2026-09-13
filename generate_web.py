@@ -3,21 +3,27 @@ import subprocess
 
 def compile_scss():
     print("Compiling SCSS...")
-    try:
-        # Check if sass is available
-        subprocess.check_call(["sass", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        # Compile SCSS
-        subprocess.check_call(["sass", "web/style.scss", "web/style.css"])
-        print("SCSS compilation successful.")
-    except Exception as e:
-        print(f"Error compiling SCSS: {e}")
-        # Build failed if SCSS cannot be compiled
-        # exit(1) 
-        # Fallback for now or strictly fail? strictly fail is better for visibility.
-        if os.path.exists("web/style.css"):
-             print("Using existing style.css due to sass error.")
-        else:
-             raise e
+    sass_cmd = None
+    for cmd in [["sass"], ["npx", "sass"], ["/opt/homebrew/bin/npx", "sass"]]:
+        try:
+            subprocess.check_call(cmd + ["--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            sass_cmd = cmd
+            break
+        except Exception:
+            continue
+
+    if sass_cmd:
+        try:
+            subprocess.check_call(sass_cmd + ["web/style.scss", "web/style.css"])
+            print(f"SCSS compilation successful using {' '.join(sass_cmd)}.")
+            return
+        except Exception as e:
+            print(f"Error compiling SCSS with {' '.join(sass_cmd)}: {e}")
+
+    if os.path.exists("web/style.css"):
+        print("Using existing style.css due to sass error.")
+    else:
+        raise RuntimeError("SCSS compilation failed and web/style.css not found.")
 
 def read_file(path):
     with open(path, "r") as f:
