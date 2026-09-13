@@ -26,6 +26,7 @@ void handleGetConfig() {
   json += "\"mqtt_user\":\"" + String(mqtt_user) + "\",";
   json += "\"mqtt_pass\":\"" + String(mqtt_pass) + "\",";
   json += "\"mqtt_topic\":\"" + String(mqtt_topic) + "\",";
+  json += "\"ha_discovery_enabled\":" + String(ha_discovery_enabled ? 1 : 0) + ",";
   json += "\"rref\":" + String(gRref) + ",";
   
   json += "\"pgain\":" + String(gP) + ",";
@@ -129,6 +130,8 @@ void handleSetConfig() {
       strcpy(mqtt_pass, server.arg(i).c_str());
     else if (server.argName(i) == "mqtt_topic")
       strcpy(mqtt_topic, server.arg(i).c_str());
+    else if (server.argName(i) == "ha_discovery_enabled")
+      ha_discovery_enabled = server.arg(i).toInt() != 0;
   }
 
   saveConfig();

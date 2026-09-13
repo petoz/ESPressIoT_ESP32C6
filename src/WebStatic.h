@@ -136,6 +136,13 @@ static const char config_html[] = R"rawliteral(
                     <label>MQTT Topic:</label>
                     <input type="text" name="mqtt_topic" id="mqtt_topic">
                 </div>
+                <div class="control-group control-group--mqtt">
+                    <label>HA Discovery:</label>
+                    <select name="ha_discovery_enabled" id="ha_discovery_enabled">
+                        <option value="0">Disabled</option>
+                        <option value="1">Enabled</option>
+                    </select>
+                </div>
                 <div class="control-group">
                     <label>Reference Resistor (Ohms):</label>
                     <input type="text" name="rref" id="rref">
@@ -217,6 +224,7 @@ static const char config_html[] = R"rawliteral(
                 document.getElementById('mqtt_user').value = data.mqtt_user || '';
                 document.getElementById('mqtt_pass').value = data.mqtt_pass || '';
                 document.getElementById('mqtt_topic').value = data.mqtt_topic || '';
+                document.getElementById('ha_discovery_enabled').value = data.ha_discovery_enabled !== undefined ? data.ha_discovery_enabled : 0;
                 document.getElementById('rref').value = data.rref;
 
                 document.getElementById('pgain').value = data.pgain;

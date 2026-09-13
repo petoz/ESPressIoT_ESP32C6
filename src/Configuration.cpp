@@ -77,6 +77,11 @@ bool loadConfig() {
   if (jsonDocument.containsKey("mqtt_topic"))
     strcpy(mqtt_topic, jsonDocument["mqtt_topic"]);
 
+  if (jsonDocument.containsKey("ha_discovery_enabled"))
+    ha_discovery_enabled = jsonDocument["ha_discovery_enabled"];
+  else
+    ha_discovery_enabled = false;
+
   return true;
 }
 
@@ -100,6 +105,7 @@ bool saveConfig() {
   jsonDocument["mqtt_pass"] = mqtt_pass;
   jsonDocument["mqtt_enabled"] = mqtt_enabled;
   jsonDocument["mqtt_topic"] = mqtt_topic;
+  jsonDocument["ha_discovery_enabled"] = ha_discovery_enabled;
 
   File configFile = SPIFFS.open("/config.json", "w");
   if (!configFile) {
@@ -137,4 +143,5 @@ void resetConfig() {
   strlcpy(mqtt_user, "petoz", sizeof(mqtt_user));
   strlcpy(mqtt_pass, "xanticavid", sizeof(mqtt_pass));
   strlcpy(mqtt_topic, "silvia_petoz", sizeof(mqtt_topic));
+  ha_discovery_enabled = false;
 }

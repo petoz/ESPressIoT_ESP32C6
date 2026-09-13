@@ -116,8 +116,24 @@ void sendHADiscovery() {
   String baseTopic = String(mqtt_topic);
   String statusTopic = baseTopic + "/status";
 
-  // 1. Climate Entity (HA circular thermostat dial)
   String climateTopic = "homeassistant/climate/" + devId + "/config";
+  String heaterTopic = "homeassistant/sensor/" + devId + "_power/config";
+  String tempTopic = "homeassistant/sensor/" + devId + "_temp/config";
+  String switchTopic = "homeassistant/switch/" + devId + "_power/config";
+  String ecoTopic = "homeassistant/sensor/" + devId + "_eco/config";
+
+  if (!ha_discovery_enabled) {
+    client.publish(climateTopic.c_str(), "", true);
+    client.publish(heaterTopic.c_str(), "", true);
+    client.publish(tempTopic.c_str(), "", true);
+    client.publish(switchTopic.c_str(), "", true);
+    client.publish(ecoTopic.c_str(), "", true);
+    client.publish(("homeassistant/number/" + devId + "_kp/config").c_str(), "", true);
+    client.publish(("homeassistant/number/" + devId + "_ki/config").c_str(), "", true);
+    client.publish(("homeassistant/number/" + devId + "_kd/config").c_str(), "", true);
+    Serial.println("HA Discovery is disabled (unregistered from broker).");
+    return;
+  }
   String climateConfig = "{"
       "\"name\":\"Silvia PID\","
       "\"unique_id\":\"" + devId + "_climate\","
