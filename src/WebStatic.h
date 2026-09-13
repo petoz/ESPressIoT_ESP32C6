@@ -116,23 +116,23 @@ static const char config_html[] = R"rawliteral(
                         <option value="0">Disabled</option>
                     </select>
                 </div>
-                <div class="control-group">
+                <div class="control-group control-group--mqtt">
                     <label>MQTT Server:</label>
                     <input type="text" name="mqtt_server" id="mqtt_server">
                 </div>
-                <div class="control-group">
+                <div class="control-group control-group--mqtt">
                     <label>MQTT Port:</label>
                     <input type="text" name="mqtt_port" id="mqtt_port">
                 </div>
-                <div class="control-group">
+                <div class="control-group control-group--mqtt">
                     <label>MQTT User:</label>
                     <input type="text" name="mqtt_user" id="mqtt_user">
                 </div>
-                <div class="control-group">
+                <div class="control-group control-group--mqtt">
                     <label>MQTT Password:</label>
                     <input type="password" name="mqtt_pass" id="mqtt_pass">
                 </div>
-                <div class="control-group">
+                <div class="control-group control-group--mqtt">
                     <label>MQTT Topic:</label>
                     <input type="text" name="mqtt_topic" id="mqtt_topic">
                 </div>

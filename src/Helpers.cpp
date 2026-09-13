@@ -22,14 +22,15 @@ String macToString(const uint8_t *mac) {
 }
 
 String statusAsJson() {
-  StaticJsonDocument<256> statusObject;
+  StaticJsonDocument<384> statusObject;
   String outputString;
 
   statusObject["time"] = time_now;
   statusObject["mesauredTemperature"] = gInputTemp;
   statusObject["targetTemperature"] = gTargetTemp;
   statusObject["heaterPower"] = gOutputPwr;
-  statusObject["externalControlMode"] = externalControlMode;
+  statusObject["poweroffMode"] = poweroffMode;
+  statusObject["heaterOn"] = !poweroffMode;
   statusObject["externalControlMode"] = externalControlMode;
   statusObject["externalButtonState"] = gButtonState;
 

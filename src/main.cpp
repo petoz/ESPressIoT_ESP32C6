@@ -116,10 +116,6 @@ void loop() {
     // create status String (JSON)
     gStatusAsJson = statusAsJson();
 
-#ifdef ENABLE_MQTT
-    loopMQTT();
-#endif
-
 #ifdef ENABLE_TELNET
     loopTelnet();
 #endif
@@ -144,5 +140,9 @@ void loop() {
 
 #ifdef ENABLE_HTTP
   loopWebSrv();
+#endif
+
+#ifdef ENABLE_MQTT
+  loopMQTT();
 #endif
 }
