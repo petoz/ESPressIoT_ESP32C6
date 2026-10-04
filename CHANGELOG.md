@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0-beta.2] - 2026-10-04
+## [1.6.0] - 2026-10-04
 
 ### Fixed
 - **Heater could stay on until the steam thermostat tripped.** The temperature
@@ -33,11 +33,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Task watchdog** (10 s) for the main loop, also fed during OTA upload.
 - SSR pin is driven low first thing at boot, before WiFiManager or SPIFFS.
 - Plausibility check of sensor readings (-20 .. 250 C).
+- Home Assistant MQTT auto-discovery integration.
 
 ### Changed
 - MQTT initialisation (`setupMQTT()`) now only requests (re)configuration; the
   MQTT task is created once.
-- Bumped firmware version to `1.5.0-beta.2`.
+- Bumped firmware version to `1.6.0`.
 
 ---
 
