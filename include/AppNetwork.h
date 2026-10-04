@@ -4,7 +4,8 @@
 #include <Arduino.h>
 
 void setupWiFi();
-void setupMQTT();
-void loopMQTT();
+void setupMQTT();   // starts the MQTT task (once) and requests (re)configuration
+void loopMQTT();    // main-loop side: only handles deferred work (config save)
+void setMqttStatus(const String &json); // thread-safe status hand-over to MQTT
 
 #endif

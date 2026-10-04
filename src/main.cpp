@@ -8,6 +8,7 @@
 #include "Tuning.h"
 #include "Web.h"
 #include <Arduino.h>
+#include <esp_task_wdt.h>
 
 // Options
 #define ENABLE_JSON
@@ -24,6 +25,9 @@ void setupMQTT();
 void loopMQTT();
 
 void setup() {
+  // Safety first: make sure the SSR is off before anything that can block
+  // (WiFiManager portal, SPIFFS, ...) runs.
+  setupHeater();
   gOutputPwr = 0;
 
   Serial.begin(115200);
@@ -65,7 +69,6 @@ void setup() {
 #endif
 
   // setup components
-  setupHeater();
   setupSensor();
 
   // start PID
@@ -78,11 +81,23 @@ void setup() {
   time_now = millis();
   time_last = time_now;
   gEcoStartTime = time_now; // Initialize ECO timer
+
+  // Watchdog: reboot if the main loop hangs. The heater pin is also forced low
+  // by its own hardware timer if the loop stalls.
+  esp_task_wdt_config_t wdtConfig = {};
+  wdtConfig.timeout_ms = LOOP_WDT_TIMEOUT_MS;
+  wdtConfig.idle_core_mask = 0;
+  wdtConfig.trigger_panic = true;
+  if (esp_task_wdt_reconfigure(&wdtConfig) != ESP_OK) {
+    esp_task_wdt_init(&wdtConfig);
+  }
+  esp_task_wdt_add(NULL);
 }
 
 void serialStatus() { Serial.println(gStatusAsJson); }
 
 void loop() {
+  esp_task_wdt_reset();
   time_now = millis();
 
   updateTempSensor();
@@ -92,7 +107,28 @@ void loop() {
 
   if (abs((long)(time_now - time_last)) >= PID_INTERVAL or
       time_last > time_now) {
+    // Failsafe: no fresh valid temperature, or temperature above the limit.
+    bool failsafe = !sensorIsHealthy() || gInputTemp > MAX_SAFE_TEMP;
+    if (failsafe != gSensorFault) {
+      gSensorFault = failsafe;
+      if (failsafe) {
+        Serial.println("FAILSAFE: stale/invalid temperature or over limit, "
+                       "heater forced OFF");
+        if (!tuning) {
+          ESPPID.SetMode(MANUAL);
+        }
+      } else {
+        Serial.println("FAILSAFE cleared: temperature valid again");
+        if (!tuning) {
+          ESPPID.SetMode(AUTOMATIC); // re-initialises the integral term
+        }
+      }
+    }
+
     if (poweroffMode == true) {
+      gOutputPwr = 0;
+      setHeatPowerPercentage(gOutputPwr);
+    } else if (gSensorFault) {
       gOutputPwr = 0;
       setHeatPowerPercentage(gOutputPwr);
     } else if (externalControlMode == true) {
@@ -115,6 +151,7 @@ void loop() {
 
     // create status String (JSON)
     gStatusAsJson = statusAsJson();
+    setMqttStatus(gStatusAsJson);
 
 #ifdef ENABLE_TELNET
     loopTelnet();

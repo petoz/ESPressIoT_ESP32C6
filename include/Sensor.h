@@ -6,5 +6,6 @@
 void setupSensor();
 void updateTempSensor();
 float getTemp();
+bool sensorIsHealthy();
 
 #endif

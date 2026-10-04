@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <PID_v1.h>
 
-#define FW_VERSION "1.5.0-beta.1"
+#define FW_VERSION "1.5.0-beta.2"
 #ifndef GIT_COMMIT
 #define GIT_COMMIT "unknown"
 #endif
@@ -35,6 +35,25 @@ extern char mqtt_topic[32];
 #define DISPLAY_INTERVAL 1000
 #define PID_INTERVAL 200
 
+// Safety limits
+// Heater is forced off if no valid temperature sample arrives for this long.
+#define SENSOR_STALE_MS 2000
+// ESP-side cutoff. Must stay above the normal steam-mode temperature
+// (~160 C on Silvia), where the PID output is bypassed anyway.
+#define MAX_SAFE_TEMP 175.0
+// Readings outside this range are treated as sensor errors.
+#define SENSOR_MIN_VALID -20.0
+#define SENSOR_MAX_VALID 250.0
+// A sample differing from the previous one by more than this is held back
+// as a possible spike until it is confirmed by following samples.
+#define SENSOR_SPIKE_LIMIT 5.0
+#define SENSOR_SPIKE_CONFIRM 3
+// Independent hardware-timer watchdog: SSR pin is forced low if the main
+// loop does not refresh the heater for this long.
+#define HEATER_MAX_ON_MS 1500
+// Task watchdog timeout for the main loop.
+#define LOOP_WDT_TIMEOUT_MS 10000
+
 // Global variables
 extern double gTargetTemp;
 extern double gOvershoot;
@@ -56,6 +75,7 @@ extern boolean tuning;
 extern boolean osmode;
 extern boolean poweroffMode;
 extern boolean externalControlMode;
+extern boolean gSensorFault; // true while heater is forced off (sensor/over-temp)
 
 extern String gStatusAsJson;
 

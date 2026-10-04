@@ -33,6 +33,7 @@ String statusAsJson() {
   statusObject["heaterOn"] = !poweroffMode;
   statusObject["externalControlMode"] = externalControlMode;
   statusObject["externalButtonState"] = gButtonState;
+  statusObject["sensorFault"] = gSensorFault;
 
   // ECO Time Remaining logic
   long remainingMs = -1;

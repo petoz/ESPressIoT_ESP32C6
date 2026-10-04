@@ -26,6 +26,7 @@ boolean tuning = false;
 boolean osmode = false;
 boolean poweroffMode = false;
 boolean externalControlMode = false;
+boolean gSensorFault = false;
 bool mqtt_enabled = true;
 bool ha_discovery_enabled = false;
 

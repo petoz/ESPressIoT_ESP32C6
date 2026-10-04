@@ -27,10 +27,15 @@ float lastT = 0.0;
 float SumT = 0.0;
 int CntT = 0;
 unsigned long lastSensTime;
+unsigned long lastValidSampleMs = 0; // time of last accepted sample
+bool haveSample = false;             // at least one valid sample received
+float spikeT = 0.0;                  // candidate value of a suspected spike
+int spikeCnt = 0;
 
 void setupSensor() {
   max31865.begin(MAX31865_3WIRE); // set to 2WIRE, 3WIRE or 4WIRE as necessary
   lastSensTime = millis();
+  lastValidSampleMs = millis();
 }
 
 void updateTempSensor() {
@@ -61,18 +66,46 @@ void updateTempSensor() {
         Serial.println("Under/Over voltage");
       }
       max31865.clearFault();
+    } else if (isnan(curT) || curT < SENSOR_MIN_VALID ||
+               curT > SENSOR_MAX_VALID) {
+      // Implausible value (open/shorted sensor, SPI noise): do not use it.
+      // No fresh valid sample means the main loop failsafe turns heating off.
+      Serial.print("Invalid temperature reading: ");
+      Serial.println(curT);
     } else {
-      // very simple selection of noise hits/invalid values
-      if (abs(curT - lastT) < 1.0 ||
-          lastT < 1) { // Filter spikes? Or maybe just simple averaging
-        // For simple averaging
+      bool accept = false;
+      if (!haveSample || fabs(curT - lastT) < SENSOR_SPIKE_LIMIT) {
+        accept = true;
+        spikeCnt = 0;
+      } else {
+        // Possible spike. Hold it back, but accept it once enough consecutive
+        // samples agree with each other, so a real change can never lock the
+        // filter out.
+        if (spikeCnt > 0 && fabs(curT - spikeT) < SENSOR_SPIKE_LIMIT) {
+          spikeCnt++;
+        } else {
+          spikeCnt = 1;
+        }
+        spikeT = curT;
+        if (spikeCnt >= SENSOR_SPIKE_CONFIRM) {
+          accept = true;
+          spikeCnt = 0;
+        }
+      }
+      if (accept) {
         SumT += curT;
         CntT++;
         lastT = curT;
+        haveSample = true;
+        lastValidSampleMs = millis();
       }
     }
     lastSensTime = millis();
   }
+}
+
+bool sensorIsHealthy() {
+  return (millis() - lastValidSampleMs) < SENSOR_STALE_MS;
 }
 
 float getTemp() {

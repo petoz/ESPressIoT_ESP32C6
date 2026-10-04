@@ -1,3 +1,4 @@
+#include <esp_task_wdt.h>
 #include "Web.h"
 #include "AppNetwork.h"
 #include "Configuration.h"
@@ -121,15 +122,15 @@ void handleSetConfig() {
     else if (server.argName(i) == "mqtt_enabled")
       mqtt_enabled = server.arg(i).toInt();
     else if (server.argName(i) == "mqtt_server")
-      strcpy(mqtt_server, server.arg(i).c_str());
+      strlcpy(mqtt_server, server.arg(i).c_str(), sizeof(mqtt_server));
     else if (server.argName(i) == "mqtt_port")
-      strcpy(mqtt_port, server.arg(i).c_str());
+      strlcpy(mqtt_port, server.arg(i).c_str(), sizeof(mqtt_port));
     else if (server.argName(i) == "mqtt_user")
-      strcpy(mqtt_user, server.arg(i).c_str());
+      strlcpy(mqtt_user, server.arg(i).c_str(), sizeof(mqtt_user));
     else if (server.argName(i) == "mqtt_pass")
-      strcpy(mqtt_pass, server.arg(i).c_str());
+      strlcpy(mqtt_pass, server.arg(i).c_str(), sizeof(mqtt_pass));
     else if (server.argName(i) == "mqtt_topic")
-      strcpy(mqtt_topic, server.arg(i).c_str());
+      strlcpy(mqtt_topic, server.arg(i).c_str(), sizeof(mqtt_topic));
     else if (server.argName(i) == "ha_discovery_enabled")
       ha_discovery_enabled = server.arg(i).toInt() != 0;
   }
@@ -273,6 +274,7 @@ void handleUpdate() {
 
 void handleUpdateUpload() {
   HTTPUpload &upload = server.upload();
+  esp_task_wdt_reset();
   if (upload.status == UPLOAD_FILE_START) {
     Serial.printf("Update: %s\n", upload.filename.c_str());
     if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { // start with max available size

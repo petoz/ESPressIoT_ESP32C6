@@ -63,19 +63,19 @@ bool loadConfig() {
     gaD = jsonDocument["aD"];
 
   if (jsonDocument.containsKey("mqtt_server"))
-    strcpy(mqtt_server, jsonDocument["mqtt_server"]);
+    strlcpy(mqtt_server, jsonDocument["mqtt_server"], sizeof(mqtt_server));
   if (jsonDocument.containsKey("mqtt_port"))
-    strcpy(mqtt_port, jsonDocument["mqtt_port"]);
+    strlcpy(mqtt_port, jsonDocument["mqtt_port"], sizeof(mqtt_port));
   if (jsonDocument.containsKey("mqtt_user"))
-    strcpy(mqtt_user, jsonDocument["mqtt_user"]);
+    strlcpy(mqtt_user, jsonDocument["mqtt_user"], sizeof(mqtt_user));
   if (jsonDocument.containsKey("mqtt_pass"))
-    strcpy(mqtt_pass, jsonDocument["mqtt_pass"]);
+    strlcpy(mqtt_pass, jsonDocument["mqtt_pass"], sizeof(mqtt_pass));
 
   if (jsonDocument.containsKey("mqtt_enabled"))
     mqtt_enabled = jsonDocument["mqtt_enabled"];
 
   if (jsonDocument.containsKey("mqtt_topic"))
-    strcpy(mqtt_topic, jsonDocument["mqtt_topic"]);
+    strlcpy(mqtt_topic, jsonDocument["mqtt_topic"], sizeof(mqtt_topic));
 
   if (jsonDocument.containsKey("ha_discovery_enabled"))
     ha_discovery_enabled = jsonDocument["ha_discovery_enabled"];

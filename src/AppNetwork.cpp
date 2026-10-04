@@ -21,6 +21,8 @@ const char *mqttStatusTopic;
 
 // Flag for saving data
 bool shouldSaveConfig = false;
+// Set from the MQTT task, handled in the main loop
+static volatile bool mqttSaveConfigPending = false;
 
 // Callback notifying us of the need to save config
 void saveConfigCallback() {
@@ -63,10 +65,10 @@ void setupWiFi() {
   Serial.println("connected...yeey :)");
 
   // read updated parameters
-  strcpy(mqtt_server, custom_mqtt_server.getValue());
-  strcpy(mqtt_port, custom_mqtt_port.getValue());
-  strcpy(mqtt_user, custom_mqtt_user.getValue());
-  strcpy(mqtt_pass, custom_mqtt_pass.getValue());
+  strlcpy(mqtt_server, custom_mqtt_server.getValue(), sizeof(mqtt_server));
+  strlcpy(mqtt_port, custom_mqtt_port.getValue(), sizeof(mqtt_port));
+  strlcpy(mqtt_user, custom_mqtt_user.getValue(), sizeof(mqtt_user));
+  strlcpy(mqtt_pass, custom_mqtt_pass.getValue(), sizeof(mqtt_pass));
 
   Serial.println("The values in the file are: ");
   Serial.println("\tmqtt_server : " + String(mqtt_server));
@@ -262,7 +264,7 @@ void MQTT_callback(char *topic, byte *payload, unsigned int length) {
     if (val > 10.0 && val < 150.0) {
       gTargetTemp = val;
       gEcoStartTime = millis();
-      saveConfig();
+      mqttSaveConfigPending = true;
       Serial.printf("MQTT: Target temp set to %.1f\n", gTargetTemp);
     }
   }
@@ -306,7 +308,26 @@ void MQTT_callback(char *topic, byte *payload, unsigned int length) {
   }
 }
 
-void setupMQTT() {
+// ---- MQTT runs in its own task -------------------------------------------
+// client.connect() / DNS lookups can block for seconds when the broker is
+// unreachable. They must never stall the heater control loop, so all MQTT
+// client access happens in mqttTask().
+static TaskHandle_t mqttTaskHandle = nullptr;
+static SemaphoreHandle_t mqttStatusMutex = nullptr;
+static char mqttStatusBuf[512] = "";
+static volatile bool mqttReconfigure = false;
+
+void setMqttStatus(const String &json) {
+  if (!mqttStatusMutex)
+    return;
+  if (xSemaphoreTake(mqttStatusMutex, 0) == pdTRUE) {
+    strlcpy(mqttStatusBuf, json.c_str(), sizeof(mqttStatusBuf));
+    xSemaphoreGive(mqttStatusMutex);
+  }
+}
+
+// Runs inside the MQTT task.
+static void mqttApplyConfig() {
   uint16_t port = atoi(mqtt_port);
   if (port == 0) {
     port = 1883;
@@ -326,7 +347,7 @@ void setupMQTT() {
   }
 }
 
-void loopMQTT() {
+static void mqttStep() {
   if (!mqtt_enabled || mqtt_server[0] == '\0') {
     if (client.connected()) {
       client.disconnect();
@@ -349,8 +370,47 @@ void loopMQTT() {
       unsigned long now = millis();
       if (now - lastPublish >= 1000) {
         lastPublish = now;
-        client.publish(mqttStatusTopic, gStatusAsJson.c_str());
+        char buf[sizeof(mqttStatusBuf)];
+        if (xSemaphoreTake(mqttStatusMutex, pdMS_TO_TICKS(50)) == pdTRUE) {
+          strlcpy(buf, mqttStatusBuf, sizeof(buf));
+          xSemaphoreGive(mqttStatusMutex);
+          if (buf[0] != '\0') {
+            client.publish(mqttStatusTopic, buf);
+          }
+        }
       }
     }
+  }
+}
+
+static void mqttTask(void *) {
+  for (;;) {
+    if (mqttReconfigure) {
+      mqttReconfigure = false;
+      mqttApplyConfig();
+    }
+    mqttStep();
+    vTaskDelay(pdMS_TO_TICKS(10));
+  }
+}
+
+// Can be called repeatedly (e.g. after config change from the web UI). The
+// task is created once; later calls only request a re-configuration.
+void setupMQTT() {
+  mqttReconfigure = true;
+  if (!mqttStatusMutex) {
+    mqttStatusMutex = xSemaphoreCreateMutex();
+  }
+  if (!mqttTaskHandle) {
+    xTaskCreate(mqttTask, "mqtt", 10240, nullptr, 1, &mqttTaskHandle);
+  }
+}
+
+// Main-loop side. MQTT itself runs in mqttTask(); here only work that must
+// happen on the main task is done.
+void loopMQTT() {
+  if (mqttSaveConfigPending) {
+    mqttSaveConfigPending = false;
+    saveConfig();
   }
 }

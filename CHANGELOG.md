@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0-beta.2] - 2026-10-04
+
+### Fixed
+- **Heater could stay on until the steam thermostat tripped.** The temperature
+  spike filter in `Sensor.cpp` latched: once the real temperature moved more
+  than 1 C away from the last accepted sample (e.g. during a stall of the main
+  loop while heating up), every following sample was rejected forever. The PID
+  kept using a frozen temperature and drove the heater at 100 %. Reproduced by
+  blackholing packets to the MQTT broker while heating, and verified fixed
+  with the same test. The filter now holds back spikes only until they are
+  confirmed by consecutive samples, so the reading always recovers.
+- Blocking MQTT connect / DNS lookup (unreachable broker) stalled the control
+  loop for seconds. MQTT now runs in its own FreeRTOS task; the main loop only
+  hands over the status string and defers config saving.
+- Possible buffer overflow when MQTT settings were longer than their buffers
+  (`strcpy` replaced with bounded `strlcpy`).
+
+### Added
+- **Failsafe**: heater is forced off when no valid temperature sample arrives
+  for 2 s (sensor fault, invalid/NaN reading) or when the temperature exceeds
+  `MAX_SAFE_TEMP` (175 C, above normal steam-mode temperature). The PID is
+  reset on recovery to avoid integral windup. State exposed as `sensorFault`
+  in `/api/status`.
+- **Heater hardware-timer watchdog**: the SSR pin is forced low by an
+  `esp_timer` if the main loop does not refresh the heater within 1.5 s.
+- **Task watchdog** (10 s) for the main loop, also fed during OTA upload.
+- SSR pin is driven low first thing at boot, before WiFiManager or SPIFFS.
+- Plausibility check of sensor readings (-20 .. 250 C).
+
+### Changed
+- MQTT initialisation (`setupMQTT()`) now only requests (re)configuration; the
+  MQTT task is created once.
+- Bumped firmware version to `1.5.0-beta.2`.
+
+---
+
 ## [1.4.0] - 2026-09-12
 
 ### Added
